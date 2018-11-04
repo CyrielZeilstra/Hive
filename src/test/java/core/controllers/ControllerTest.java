@@ -112,7 +112,4 @@ public class ControllerTest {
         main.init();
 
     }
-
-
-
 }
