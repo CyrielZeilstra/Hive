@@ -241,7 +241,6 @@ public class Controller implements Hive {
 
 
     public void swapTurn() {
-
         if (model.getCurrentPlayer() == Player.WHITE) {
             System.out.println("Black Player it's your turn!");
             model.setCurrentPlayer(Player.BLACK);
@@ -257,10 +256,8 @@ public class Controller implements Hive {
             System.out.println("White Player it's your turn!");
             model.setCurrentPlayer(Player.WHITE);
             blackPlayer.addMove();
-
             if (whitePlayer.getMoves() == 3 && !whitePlayer.hasPlayedQueen()) {
                 List<Enum> whiteQueen = Arrays.asList(Tile.QUEEN_BEE);
-
             }
 
         }

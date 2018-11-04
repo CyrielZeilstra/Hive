@@ -113,11 +113,74 @@ public class ControllerTest {
 
     @DisplayName("4a can only play own pieces")
     @Test
-    public void canOnlyPlayOwnPieces() throws Hive.IllegalMove {
+    public void canOnlyPlayOwnPieces() throws nl.hanze.hive.Hive.IllegalMove {
         main.init();
-        main.play(Hive.Tile.QUEEN_BEE,0,0);
-        main.play(Hive.Tile.QUEEN_BEE,0,1);
-        main.play(Hive.Tile.QUEEN_BEE,0,0);
-        expectedEx.expect(Hive.IllegalMove.class);
+        main.play(Hive.Tile.QUEEN_BEE, 0, 0);
+        main.play(Hive.Tile.QUEEN_BEE, 1, 0);
+        expectedEx.expect(nl.hanze.hive.Hive.IllegalMove.class);
+        expectedEx.expectMessage("Not a valid move.");
+        main.play(Hive.Tile.QUEEN_BEE, 1, -1);
     }
+
+    @DisplayName("4c can only play own pieces")
+    @Test
+    public void haveToPlayOnNewSpot() throws nl.hanze.hive.Hive.IllegalMove {
+        main.init();
+        main.play(Hive.Tile.QUEEN_BEE, 0, 0);
+        expectedEx.expect(nl.hanze.hive.Hive.IllegalMove.class);
+        expectedEx.expectMessage("Not a valid move.");
+        main.play(Hive.Tile.QUEEN_BEE, 0, 0);
+    }
+
+    @DisplayName("4d can only play own pieces")
+    @Test
+    public void canOnlyPlayNextToOwnPieces() throws nl.hanze.hive.Hive.IllegalMove {
+        main.init();
+        main.play(Hive.Tile.QUEEN_BEE, 0, 0);
+        main.play(Hive.Tile.QUEEN_BEE, 1, 0);
+        expectedEx.expect(nl.hanze.hive.Hive.IllegalMove.class);
+        expectedEx.expectMessage("Not a valid move.");
+        main.play(Hive.Tile.QUEEN_BEE, 2, 0);
+    }
+
+    @DisplayName("4e player is forced to play queen after 3 moves.")
+    @Test
+    public void forcePlayerToPlayQueenAfterThreeMoves() throws nl.hanze.hive.Hive.IllegalMove {
+        main.init();
+        //1
+        main.play(Hive.Tile.SOLDIER_ANT, 0, 0);
+        main.play(Hive.Tile.SOLDIER_ANT, 1, 0);
+        //2
+        main.play(Hive.Tile.SOLDIER_ANT, -1, 0);
+        main.play(Hive.Tile.SOLDIER_ANT, 2, 0);
+        //3
+        main.play(Hive.Tile.SOLDIER_ANT, -2, 0);
+        main.play(Hive.Tile.SOLDIER_ANT, 3, 0);
+        //4
+        expectedEx.expect(nl.hanze.hive.Hive.IllegalMove.class);
+        expectedEx.expectMessage("Not a valid move.");
+        main.play(Hive.Tile.BEETLE, -3, 0);
+    }
+
+    @DisplayName("5a Player can only move played pieces")
+    @Test
+    public void cannotImmidiatlyMove() throws nl.hanze.hive.Hive.IllegalMove {
+        main.init();
+        //1
+        main.play(Hive.Tile.SOLDIER_ANT, 0, 0);
+        //4
+        expectedEx.expect(nl.hanze.hive.Hive.IllegalMove.class);
+        expectedEx.expectMessage("Not a valid move.");
+        main.move(0, 0, 1, 0);
+    }
+
+    @DisplayName("12 Player can only pass if moves = 0")
+    @Test
+    public void passTest() throws Hive.IllegalMove {
+        Hive.Player player = main.model.getCurrentPlayer();
+        main.pass();
+        assertTrue(main.model.getCurrentPlayer() == player);
+    }
+
+
 }
