@@ -352,12 +352,11 @@ public class Controller implements Hive {
             for (Piece piece : model.getBoard()) {
                 if (piece.getPiece() == Tile.QUEEN_BEE) {
                     if (model.getNeighbours(piece.getCenter()).size() == 6) {
-                        if (piece.getPlayer() == player && piece.getPlayer() == player.BLACK) {
-                            System.out.println("White player won the game!");
+                        if (piece.getPlayer() == player) {
+                            return true;
                         } else {
-                            System.out.println("Black player won the game!");
+                            return false;
                         }
-                        return true;
                     }
                 }
             }
