@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.rules.ExpectedException;
 
+import java.awt.*;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -166,12 +167,44 @@ public class ControllerTest {
     @Test
     public void cannotImmidiatlyMove() throws nl.hanze.hive.Hive.IllegalMove {
         main.init();
-        //1
         main.play(Hive.Tile.SOLDIER_ANT, 0, 0);
-        //4
         expectedEx.expect(nl.hanze.hive.Hive.IllegalMove.class);
         expectedEx.expectMessage("Not a valid move.");
         main.move(0, 0, 1, 0);
+    }
+
+    @DisplayName("5c piece has to be in contact after move")
+    @Test
+    public void pieceIsHasToBeInContactAfterMove() throws nl.hanze.hive.Hive.IllegalMove {
+        main.init();
+        main.play(Hive.Tile.SOLDIER_ANT, 0, 0);
+        expectedEx.expect(nl.hanze.hive.Hive.IllegalMove.class);
+        expectedEx.expectMessage("Not a valid move.");
+        main.move(0, 0, 5, 5);
+    }
+
+    @DisplayName("5d piece has to be in contact after move")
+    @Test
+    public void pieceMoveDoesNotCreateIsland() throws nl.hanze.hive.Hive.IllegalMove {
+        main.init();
+        main.play(Hive.Tile.QUEEN_BEE, 0, 0);
+        main.play(Hive.Tile.QUEEN_BEE, 1, 0);
+        main.move(1, 0, 5, 5);
+        assertTrue(main.model.breaksConnection(new Point(0, 0)));
+    }
+
+
+    @DisplayName("6b can piece slip in")
+    @Test
+    public void pieceHasToSlideIn() throws nl.hanze.hive.Hive.IllegalMove {
+        main.init();
+        main.play(Hive.Tile.QUEEN_BEE, 0, 0);
+        main.play(Hive.Tile.QUEEN_BEE, 1, -2);
+        main.play(Hive.Tile.BEETLE, 0, -1);
+        main.move(0, -1, 1, -1);
+        expectedEx.expect(nl.hanze.hive.Hive.IllegalMove.class);
+        expectedEx.expectMessage("Not a valid move.");
+        assertFalse(main.model.canSlideIn(new Point(0, -1), new Point(1, -1)));
     }
 
     @DisplayName("12 Player can only pass if moves = 0")

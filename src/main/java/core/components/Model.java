@@ -54,7 +54,7 @@ public class Model {
         return points;
     }
 
-    private boolean breaksConnection(Point from) {
+    public boolean breaksConnection(Point from) {
         ArrayList<Point> temp = getBoardAsPoints();
         temp.remove(from);
         Set<Point> boardAfterMove = new HashSet<Point>(temp);
@@ -79,7 +79,7 @@ public class Model {
         return completeListOfConnections;
     }
 
-    private boolean canSlideIn(Point from, Point to) {
+    public boolean canSlideIn(Point from, Point to) {
         ArrayList<Point> tempList = new ArrayList<>();
         Set<Point> uniqueBoard = new HashSet<>(getBoardAsPoints());
         for (Point checkPoint : uniqueBoard) {
