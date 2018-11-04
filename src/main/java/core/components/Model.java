@@ -238,7 +238,7 @@ public class Model {
                 return 1;
             }
         } else {
-            double nx = (Math.abs(dy) + (1 - p)) / 1.8;
+            double nx = (Math.abs(dy) + (1 - p)) / 2;
 
             if ((int) Math.abs(dx) != (int) Math.abs(nx)) {
                 return 6;
