@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/hive.iml" filepath="$PROJECT_DIR$/.idea/modules/hive.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/hive_main.iml" filepath="$PROJECT_DIR$/.idea/modules/hive_main.iml" group="hive" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/hive_test.iml" filepath="$PROJECT_DIR$/.idea/modules/hive_test.iml" group="hive" />
+    </modules>
+  </component>
+</project>
