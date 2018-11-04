@@ -155,9 +155,8 @@ public class Model {
         Point origin = p.getCenter();
 
         int amount = Collections.frequency(getBoardAsPoints(), origin);
-        if (amount > 1) {
+        if (amount > 1 && p.getPiece() == Hive.Tile.BEETLE) {
             for (Point move : getSurroundingPoints(origin)) {
-                // stacked piece can only be beetle and cant break connection.
                 tempMoves.add(move);
             }
             return tempMoves;
