@@ -5,8 +5,10 @@ import core.components.Piece;
 import nl.hanze.hive.Hive;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.rules.ExpectedException;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
@@ -106,10 +108,16 @@ public class ControllerTest {
         assertFalse(main.isWinner(Hive.Player.WHITE));
     }
 
+    @Rule
+    public ExpectedException expectedEx = ExpectedException.none();
+
     @DisplayName("4a can only play own pieces")
     @Test
-    public void canOnlyPlayOwnPieces() {
+    public void canOnlyPlayOwnPieces() throws Hive.IllegalMove {
         main.init();
-
+        main.play(Hive.Tile.QUEEN_BEE,0,0);
+        main.play(Hive.Tile.QUEEN_BEE,0,1);
+        main.play(Hive.Tile.QUEEN_BEE,0,0);
+        expectedEx.expect(Hive.IllegalMove.class);
     }
 }
