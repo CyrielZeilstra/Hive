@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
 
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -59,4 +60,59 @@ public class ControllerTest {
         main.init();
         assertEquals("White moves first", Hive.Player.WHITE, main.model.getCurrentPlayer());
     }
+
+    @DisplayName("3c player wins if Queen surrounded")
+    @Test
+    public void playerWinsIfQueenSurrounded() {
+        main.init();
+        Piece Queen = new Piece(0, 0, false, Hive.Player.WHITE, Hive.Tile.QUEEN_BEE);
+        Piece Beetle1 = new Piece(-1, 0, false, Hive.Player.BLACK, Hive.Tile.BEETLE);
+        Piece Beetle2 = new Piece(0, -1, false, Hive.Player.BLACK, Hive.Tile.BEETLE);
+        Piece Beetle3 = new Piece(1, -1, false, Hive.Player.BLACK, Hive.Tile.BEETLE);
+        Piece Beetle4 = new Piece(1, 0, false, Hive.Player.BLACK, Hive.Tile.BEETLE);
+        Piece Beetle5 = new Piece(0, 1, false, Hive.Player.BLACK, Hive.Tile.BEETLE);
+        Piece Beetle6 = new Piece(-1, 1, false, Hive.Player.BLACK, Hive.Tile.BEETLE);
+        main.model.getBoard().add(Queen);
+        main.model.getBoard().add(Beetle1);
+        main.model.getBoard().add(Beetle2);
+        main.model.getBoard().add(Beetle3);
+        main.model.getBoard().add(Beetle4);
+        main.model.getBoard().add(Beetle5);
+        main.model.getBoard().add(Beetle6);
+        assertTrue("black wins", main.isWinner(Hive.Player.BLACK));
+    }
+
+    @DisplayName("3d draw if both Queen's surrounded")
+    @Test
+    public void drawIfBothQueensSurrounded() {
+        main.init();
+        Piece Queen1 = new Piece(0, 0, false, Hive.Player.WHITE, Hive.Tile.QUEEN_BEE);
+        Piece Queen2 = new Piece(0, 0, false, Hive.Player.BLACK, Hive.Tile.QUEEN_BEE);
+        Piece Beetle1 = new Piece(-1, 0, false, Hive.Player.BLACK, Hive.Tile.BEETLE);
+        Piece Beetle2 = new Piece(0, -1, false, Hive.Player.BLACK, Hive.Tile.BEETLE);
+        Piece Beetle3 = new Piece(1, -1, false, Hive.Player.BLACK, Hive.Tile.BEETLE);
+        Piece Beetle4 = new Piece(1, 0, false, Hive.Player.BLACK, Hive.Tile.BEETLE);
+        Piece Beetle5 = new Piece(0, 1, false, Hive.Player.BLACK, Hive.Tile.BEETLE);
+        Piece Beetle6 = new Piece(-1, 1, false, Hive.Player.BLACK, Hive.Tile.BEETLE);
+        main.model.getBoard().add(Queen1);
+        main.model.getBoard().add(Queen2);
+        main.model.getBoard().add(Beetle1);
+        main.model.getBoard().add(Beetle2);
+        main.model.getBoard().add(Beetle3);
+        main.model.getBoard().add(Beetle4);
+        main.model.getBoard().add(Beetle5);
+        main.model.getBoard().add(Beetle6);
+        assertFalse(main.isWinner(Hive.Player.BLACK));
+        assertFalse(main.isWinner(Hive.Player.WHITE));
+    }
+
+    @DisplayName("4a can only play own pieces")
+    @Test
+    public void canOnlyPlayOwnPieces() {
+        main.init();
+
+    }
+
+
+
 }
