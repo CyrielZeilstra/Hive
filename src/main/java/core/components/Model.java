@@ -1,8 +1,6 @@
-package nl.hanze.hive.components;
+package core.components;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import nl.hanze.hive.interfaces.Hive;
+import nl.hanze.hive.Hive;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -17,8 +15,8 @@ public class Model {
 
     private Enum selectedPiece;
     private Hive.Player currentPlayer;
-    private ObservableList<Enum> whiteAvailablePieces = FXCollections.observableArrayList();
-    private ObservableList<Enum> blackAvailablePieces = FXCollections.observableArrayList();
+    private ArrayList<Enum> whiteAvailablePieces = new ArrayList<>();
+    private ArrayList<Enum> blackAvailablePieces = new ArrayList<>();
     public ArrayList<Piece> board = new ArrayList<>();
 
     public ArrayList<Piece> getBoard() {
@@ -448,52 +446,8 @@ public class Model {
 
     public Piece createPiece(Enum tile, int q, int r) {
         Piece pieceToPlay;
-        pieceToPlay = new Piece(q, r, calculateBoardRepresentation(q, r), false, currentPlayer, tile);
+        pieceToPlay = new Piece(q, r, false, currentPlayer, tile);
         return pieceToPlay;
-    }
-
-    public Point calculateBoardRepresentation(int x, int y) {
-        Point origin = new Point(350, 250);
-        Point boardPoint = new Point();
-
-        if (y % 2 == 0) {
-            // even row
-            if (x % 2 == 0) {
-                // even column
-                boardPoint.x = origin.x + x * 50;
-                boardPoint.y = origin.y + y * 50;
-            } else {
-                // uneven column
-                boardPoint.x = origin.x + x * 50;
-                boardPoint.y = origin.y + y * 50;
-            }
-        } else {
-            // uneven row
-            if (x % 2 == 0) {
-                // even column
-                boardPoint.x = origin.x + x * 25;
-                boardPoint.y = origin.y + y * 45;
-            } else {
-                // uneven column
-                boardPoint.x = origin.x + x * 45 + 25;
-                boardPoint.y = origin.y + y * 25;
-            }
-
-        }
-
-        // {-1, 0}, {0, -1}, {1, -1}, {1, 0}, {0, 1}, {-1, 1}
-        // {-50, 0}, {-25, -45}, {25, -45}, {50, 0}, {25, 45}, {-25, 45}
-        // {-25, -45}, {25, -45}, {25, 45}, {-25, 45}
-        // 0 0  = 280,250
-        return boardPoint;
-    }
-
-    public ObservableList<Enum> getWhiteAvailablePieces() {
-        return whiteAvailablePieces;
-    }
-
-    public ObservableList<Enum> getBlackAvailablePieces() {
-        return blackAvailablePieces;
     }
 
     public Enum getSelectedPiece() {
@@ -512,11 +466,19 @@ public class Model {
         this.currentPlayer = currentPlayer;
     }
 
-    public void setWhiteAvailablePieces(ObservableList<Enum> whiteAvailablePieces) {
+    public ArrayList<Enum> getWhiteAvailablePieces() {
+        return whiteAvailablePieces;
+    }
+
+    public void setWhiteAvailablePieces(ArrayList<Enum> whiteAvailablePieces) {
         this.whiteAvailablePieces = whiteAvailablePieces;
     }
 
-    public void setBlackAvailablePieces(ObservableList<Enum> blackAvailablePieces) {
+    public ArrayList<Enum> getBlackAvailablePieces() {
+        return blackAvailablePieces;
+    }
+
+    public void setBlackAvailablePieces(ArrayList<Enum> blackAvailablePieces) {
         this.blackAvailablePieces = blackAvailablePieces;
     }
 }

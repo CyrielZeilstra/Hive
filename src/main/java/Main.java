@@ -1,8 +1,9 @@
-import controllers.Controller;
+import core.components.Model;
+import core.controllers.Controller;
 
 public class Main {
     public static void main(String[] args) {
-        new Controller.Controller(new Model()));
-
+        Controller main = new Controller(new Model());
+        main.newGame();
     }
 }

@@ -1,4 +1,4 @@
-package interfaces;
+package nl.hanze.hive;
 
 /**
  * Hive game.

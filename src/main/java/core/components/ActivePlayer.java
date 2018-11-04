@@ -1,4 +1,4 @@
-package components;
+package core.components;
 
 /**
  * Created by Marinkton on 30-10-18.
