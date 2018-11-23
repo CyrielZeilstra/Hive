@@ -3,16 +3,13 @@ package core.controllers;
 import core.components.Model;
 import core.components.Piece;
 import nl.hanze.hive.Hive;
-import org.junit.After;
-import org.junit.Before;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.rules.ExpectedException;
 
 import java.awt.*;
-import java.io.PrintStream;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 

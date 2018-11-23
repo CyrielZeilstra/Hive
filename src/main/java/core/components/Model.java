@@ -17,7 +17,7 @@ public class Model {
     private Hive.Player currentPlayer;
     private ArrayList<Enum> whiteAvailablePieces = new ArrayList<>();
     private ArrayList<Enum> blackAvailablePieces = new ArrayList<>();
-    public ArrayList<Piece> board = new ArrayList<>();
+    private ArrayList<Piece> board = new ArrayList<>();
 
     public ArrayList<Piece> getBoard() {
         return board;

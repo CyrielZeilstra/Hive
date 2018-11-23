@@ -8,7 +8,6 @@ public class ActivePlayer {
     public boolean hasPlayedQueen;
     public int moves;
 
-
     public ActivePlayer(boolean hasPlayedQueen, int moves) {
         this.hasPlayedQueen = hasPlayedQueen;
         this.moves = moves;
