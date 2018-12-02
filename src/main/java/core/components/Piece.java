@@ -1,15 +1,17 @@
 package core.components;
 
+import nl.hanze.hive.Hive;
+
 import java.awt.*;
 
 
 public class Piece extends Polygon {
 
     private Point center;
-    private Enum player;
-    private Enum piece;
+    private Hive.Player player;
+    private Hive.Tile piece;
 
-    public Piece(int x, int y, Enum player, Enum piece) {
+    public Piece(int x, int y, Hive.Player player, Hive.Tile piece) {
         this.center = new Point(x, y);
         this.player = player;
         this.piece = piece;
@@ -23,11 +25,11 @@ public class Piece extends Polygon {
         return center;
     }
 
-    public Enum getPlayer() {
+    public Hive.Player getPlayer() {
         return player;
     }
 
-    public Enum getPiece() {
+    public Hive.Tile getPiece() {
         return piece;
     }
 }

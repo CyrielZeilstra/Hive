@@ -1,22 +1,23 @@
 package core.components;
 
-import java.util.ArrayList;
+import nl.hanze.hive.Hive;
+
 import java.util.List;
 
 /**
  * Created by Marinkton on 30-10-18.
  */
-public class Player {
+public class PlayerModel {
 
-    public boolean hasPlayedQueen = false;
-    public int amountOfMovesMade = 0;
-    List<Piece> availablePieces;
-    Enum color;
+    private boolean hasPlayedQueen = false;
+    private int amountOfMovesMade = 0;
+    private List<Hive.Tile> availablePieces;
+    private Hive.Player playerColor;
 
-    public Player(boolean hasPlayedQueen, int amountOfMovesMade, Enum color, List availablePieces) {
+    public PlayerModel(boolean hasPlayedQueen, int amountOfMovesMade, Hive.Player playerColor, List<Hive.Tile> availablePieces) {
         this.hasPlayedQueen = hasPlayedQueen;
         this.amountOfMovesMade = amountOfMovesMade;
-        this.color = color;
+        this.playerColor = playerColor;
         this.availablePieces = availablePieces;
     }
 
@@ -40,11 +41,19 @@ public class Player {
         return amountOfMovesMade;
     }
 
-    public List<Piece> getAvailablePieces() {
+    public List<Hive.Tile> getAvailablePieces() {
         return availablePieces;
     }
 
-    public void setAvailablePieces(List<Piece> availablePieces) {
+    public void setAvailablePieces(List<Hive.Tile> availablePieces) {
         this.availablePieces = availablePieces;
+    }
+
+    public boolean isHasPlayedQueen() {
+        return hasPlayedQueen;
+    }
+
+    public Hive.Player getPlayerColor() {
+        return playerColor;
     }
 }

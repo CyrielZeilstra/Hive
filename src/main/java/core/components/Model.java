@@ -8,18 +8,22 @@ import java.util.List;
 
 import static java.lang.Float.max;
 import static java.lang.Integer.min;
+import static nl.hanze.hive.Hive.Player.BLACK;
+import static nl.hanze.hive.Hive.Player.WHITE;
+import static nl.hanze.hive.Hive.Tile.*;
 
 public class Model {
 
     private Enum selectedPiece;
-    private Hive.Player currentPlayer = Hive.Player.WHITE;
-    public List<Enum> pieces = Arrays.asList(Hive.Tile.QUEEN_BEE,
-            Hive.Tile.SPIDER, Hive.Tile.SPIDER,
-            Hive.Tile.BEETLE, Hive.Tile.BEETLE,
-            Hive.Tile.GRASSHOPPER, Hive.Tile.GRASSHOPPER, Hive.Tile.GRASSHOPPER,
-            Hive.Tile.SOLDIER_ANT, Hive.Tile.SOLDIER_ANT, Hive.Tile.SOLDIER_ANT);
-    private Player white = new Player(false, 0, Hive.Player.WHITE, pieces);
-    private Player black = new Player(false, 0, Hive.Player.BLACK, pieces);
+    public List<Hive.Tile> pieces = Arrays.asList(QUEEN_BEE,
+            SPIDER, SPIDER,
+            BEETLE, BEETLE,
+            GRASSHOPPER, GRASSHOPPER, GRASSHOPPER,
+            SOLDIER_ANT, SOLDIER_ANT, SOLDIER_ANT);
+    private PlayerModel whitePlayerModel = new PlayerModel(false, 0, WHITE, pieces);
+    private PlayerModel blackPlayerModel = new PlayerModel(false, 0, BLACK, pieces);
+    private PlayerModel currentPlayerModel = whitePlayerModel;
+
 
     private ArrayList<Piece> board = new ArrayList<>();
 
@@ -27,12 +31,33 @@ public class Model {
         return board;
     }
 
+    public void swapTurn() {
+        if (getCurrentPlayerModel().getPlayerColor() == WHITE) {
+            System.out.println("Black PlayerModel it's your turn!");
+            whitePlayerModel.addMove();
+            setCurrentPlayerModel(blackPlayerModel);
+            // check if player has placed the queen before move if not show only the queen
+            if (getBlackPlayerModel().getAmountOfMovesMade() == 3 && !getBlackPlayerModel().hasPlayedQueen()) {
+                List<Enum> blackQueen = Arrays.asList(Hive.Tile.QUEEN_BEE);
+            }
+        } else if (getCurrentPlayerModel().getPlayerColor() == BLACK) {
+            System.out.println("White PlayerModel it's your turn!");
+            getBlackPlayerModel().addMove();
+            setCurrentPlayerModel(whitePlayerModel);
+
+            if (getWhitePlayerModel().getAmountOfMovesMade() == 3 && !getWhitePlayerModel().hasPlayedQueen()) {
+                List<Enum> whiteQueen = Arrays.asList(Hive.Tile.QUEEN_BEE);
+            }
+
+        }
+    }
+
     public ArrayList<Point> getAvailablePlaySpots() {
         ArrayList<Point> moves = new ArrayList<>();
         Point firstWhiteMove = new Point(0, 0);
-        if (board.size() < 2 && currentPlayer == Hive.Player.WHITE) {
+        if (board.size() < 2 && getCurrentPlayerModel().getPlayerColor() == WHITE) {
             moves.add(firstWhiteMove);
-        } else if (board.size() < 2 && currentPlayer == Hive.Player.BLACK) {
+        } else if (board.size() < 2 && getCurrentPlayerModel().getPlayerColor() == BLACK) {
             moves.addAll(getSurroundingPoints(firstWhiteMove));
         } else {
             moves.addAll(getAvailablePlays());
@@ -158,19 +183,19 @@ public class Model {
         Point origin = p.getCenter();
 
         int amount = Collections.frequency(getBoardAsPoints(), origin);
-        if (amount > 1 && p.getPiece() == Hive.Tile.BEETLE) {
+        if (amount > 1 && p.getPiece() == BEETLE) {
             for (Point move : getSurroundingPoints(origin)) {
                 tempMoves.add(move);
             }
             return tempMoves;
         } else {
-            if (p.getPiece() == Hive.Tile.QUEEN_BEE) {
+            if (p.getPiece() == QUEEN_BEE) {
                 tempMoves = getQueenMoves(origin);
             } else if (p.getPiece() == Hive.Tile.SOLDIER_ANT) {
                 tempMoves = getAntMoves(origin);
-            } else if (p.getPiece() == Hive.Tile.SPIDER) {
+            } else if (p.getPiece() == SPIDER) {
                 tempMoves = getSpiderMoves(origin);
-            } else if (p.getPiece() == Hive.Tile.GRASSHOPPER) {
+            } else if (p.getPiece() == GRASSHOPPER) {
                 tempMoves = getGrasshopperMoves(origin);
             } else {
                 tempMoves = getBeetleMoves(origin);
@@ -205,7 +230,7 @@ public class Model {
         for (Piece piece : board) {
             ArrayList<Point> moves = getSurroundingPoints(piece.getCenter());
             for (Point p : moves) {
-                if (getCurrentPlayer() != piece.getPlayer() && !pointsAlreadyOnBoard.contains(p)) {
+                if (getCurrentPlayerModel().getPlayerColor() != piece.getPlayer() && !pointsAlreadyOnBoard.contains(p)) {
                     otherPlayerMoves.add(p);
                 }
             }
@@ -214,7 +239,7 @@ public class Model {
         for (Piece piece : board) {
             ArrayList<Point> moves = getSurroundingPoints(piece.getCenter());
             for (Point p : moves) {
-                if (getCurrentPlayer() == piece.getPlayer() && !otherPlayerMoves.contains(p) && !pointsAlreadyOnBoard.contains(p)) {
+                if (getCurrentPlayerModel().getPlayerColor() == piece.getPlayer() && !otherPlayerMoves.contains(p) && !pointsAlreadyOnBoard.contains(p)) {
                     tempMoves.add(p);
                 }
             }
@@ -451,9 +476,9 @@ public class Model {
         return moves;
     }
 
-    public Piece createPiece(Enum tile, int q, int r) {
+    public Piece createPiece(Hive.Tile tile, int q, int r) {
         Piece pieceToPlay;
-        pieceToPlay = new Piece(q, r, currentPlayer, tile);
+        pieceToPlay = new Piece(q, r, currentPlayerModel.getPlayerColor(), tile);
         return pieceToPlay;
     }
 
@@ -465,19 +490,19 @@ public class Model {
         this.selectedPiece = selectedPiece;
     }
 
-    public Hive.Player getCurrentPlayer() {
-        return currentPlayer;
+    public PlayerModel getWhitePlayerModel() {
+        return whitePlayerModel;
     }
 
-    public void setCurrentPlayer(Hive.Player currentPlayer) {
-        this.currentPlayer = currentPlayer;
+    public PlayerModel getBlackPlayerModel() {
+        return blackPlayerModel;
     }
 
-    public Player getWhite() {
-        return white;
+    public PlayerModel getCurrentPlayerModel() {
+        return currentPlayerModel;
     }
 
-    public Player getBlack() {
-        return black;
+    public void setCurrentPlayerModel(PlayerModel currentPlayerModel) {
+        this.currentPlayerModel = currentPlayerModel;
     }
 }
