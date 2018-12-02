@@ -398,6 +398,11 @@ public class Model {
         return new ArrayList(validPoints);
     }
 
+    public boolean isPlayAllowed(Hive.Tile tile, int q, int r){
+        
+        return false;
+    }
+
     public ArrayList<Point> getGrasshopperMoves(Point origin) {
         ArrayList<Point> moves = new ArrayList<>();
         ArrayList<Point> pointsAlreadyOnBoard = getBoardAsPoints();
