@@ -5,8 +5,8 @@ package core.components;
  */
 public class ActivePlayer {
 
-    public boolean hasPlayedQueen;
-    public int moves;
+    public boolean hasPlayedQueen = false;
+    public int moves = 0;
 
     public ActivePlayer(boolean hasPlayedQueen, int moves) {
         this.hasPlayedQueen = hasPlayedQueen;

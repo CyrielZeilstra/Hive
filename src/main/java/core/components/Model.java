@@ -3,10 +3,8 @@ package core.components;
 import nl.hanze.hive.Hive;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.List;
 
 import static java.lang.Float.max;
 import static java.lang.Integer.min;
@@ -14,9 +12,14 @@ import static java.lang.Integer.min;
 public class Model {
 
     private Enum selectedPiece;
-    private Hive.Player currentPlayer;
-    private ArrayList<Enum> whiteAvailablePieces = new ArrayList<>();
-    private ArrayList<Enum> blackAvailablePieces = new ArrayList<>();
+    private Hive.Player currentPlayer = Hive.Player.WHITE;
+    public List<Enum> Pieces = Arrays.asList(Hive.Tile.QUEEN_BEE,
+            Hive.Tile.SPIDER, Hive.Tile.SPIDER,
+            Hive.Tile.BEETLE, Hive.Tile.BEETLE,
+            Hive.Tile.GRASSHOPPER, Hive.Tile.GRASSHOPPER, Hive.Tile.GRASSHOPPER,
+            Hive.Tile.SOLDIER_ANT, Hive.Tile.SOLDIER_ANT, Hive.Tile.SOLDIER_ANT);
+    private ArrayList<Enum> whiteAvailablePieces = new ArrayList<>(Pieces);
+    private ArrayList<Enum> blackAvailablePieces = new ArrayList<>(Pieces);
     private ArrayList<Piece> board = new ArrayList<>();
 
     public ArrayList<Piece> getBoard() {
@@ -445,7 +448,7 @@ public class Model {
 
     public Piece createPiece(Enum tile, int q, int r) {
         Piece pieceToPlay;
-        pieceToPlay = new Piece(q, r, false, currentPlayer, tile);
+        pieceToPlay = new Piece(q, r, currentPlayer, tile);
         return pieceToPlay;
     }
 

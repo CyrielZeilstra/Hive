@@ -32,12 +32,12 @@ public class TilesTest {
     @Before
     public void setUp() throws Exception {
         model = new Model();
-        p = new Piece(0,0,false, Hive.Player.WHITE, Hive.Tile.QUEEN_BEE);
-        p1 = new Piece(1,0,false, Hive.Player.BLACK, Hive.Tile.QUEEN_BEE);
-        p2 = new Piece(-1,0,false, Hive.Player.WHITE, Hive.Tile.BEETLE);
-        ant = new Piece(2,0,false, Hive.Player.BLACK, Hive.Tile.SOLDIER_ANT);
-        spider = new Piece(-2,0,false, Hive.Player.WHITE, Hive.Tile.SPIDER);
-        hopper = new Piece(3,0,false, Hive.Player.BLACK, Hive.Tile.SPIDER);
+        p = new Piece(0,0, Hive.Player.WHITE, Hive.Tile.QUEEN_BEE);
+        p1 = new Piece(1,0, Hive.Player.BLACK, Hive.Tile.QUEEN_BEE);
+        p2 = new Piece(-1,0, Hive.Player.WHITE, Hive.Tile.BEETLE);
+        ant = new Piece(2,0, Hive.Player.BLACK, Hive.Tile.SOLDIER_ANT);
+        spider = new Piece(-2,0, Hive.Player.WHITE, Hive.Tile.SPIDER);
+        hopper = new Piece(3,0, Hive.Player.BLACK, Hive.Tile.SPIDER);
 
         model.getBoard().add(spider);
         model.getBoard().add(p);
