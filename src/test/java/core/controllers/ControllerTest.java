@@ -64,7 +64,7 @@ public class ControllerTest {
     @Test
     public void whitePlaysFirst() {
 
-        assertEquals("White moves first", Hive.Player.WHITE, hive.model.getCurrentPlayer());
+        assertEquals("White amountOfMovesMade first", Hive.Player.WHITE, hive.model.getCurrentPlayer());
     }
 
     @DisplayName("3c player wins if Queen surrounded")
@@ -147,7 +147,7 @@ public class ControllerTest {
         hive.play(Hive.Tile.QUEEN_BEE, 2, 0);
     }
 
-    @DisplayName("4e player is forced to play queen after 3 moves.")
+    @DisplayName("4e player is forced to play queen after 3 amountOfMovesMade.")
     @Test
     public void forcePlayerToPlayQueenAfterThreeMoves() throws nl.hanze.hive.Hive.IllegalMove {
 
@@ -209,7 +209,7 @@ public class ControllerTest {
         assertFalse(hive.model.canSlideIn(new Point(0, -1), new Point(1, -1)));
     }
 
-    @DisplayName("12 Player can only pass if moves = 0")
+    @DisplayName("12 Player can only pass if amountOfMovesMade = 0")
     @Test
     public void passTest() throws Hive.IllegalMove {
         Hive.Player player = hive.model.getCurrentPlayer();

@@ -13,13 +13,14 @@ public class Model {
 
     private Enum selectedPiece;
     private Hive.Player currentPlayer = Hive.Player.WHITE;
-    public List<Enum> Pieces = Arrays.asList(Hive.Tile.QUEEN_BEE,
+    public List<Enum> pieces = Arrays.asList(Hive.Tile.QUEEN_BEE,
             Hive.Tile.SPIDER, Hive.Tile.SPIDER,
             Hive.Tile.BEETLE, Hive.Tile.BEETLE,
             Hive.Tile.GRASSHOPPER, Hive.Tile.GRASSHOPPER, Hive.Tile.GRASSHOPPER,
             Hive.Tile.SOLDIER_ANT, Hive.Tile.SOLDIER_ANT, Hive.Tile.SOLDIER_ANT);
-    private ArrayList<Enum> whiteAvailablePieces = new ArrayList<>(Pieces);
-    private ArrayList<Enum> blackAvailablePieces = new ArrayList<>(Pieces);
+    private Player white = new Player(false, 0, Hive.Player.WHITE, pieces);
+    private Player black = new Player(false, 0, Hive.Player.BLACK, pieces);
+
     private ArrayList<Piece> board = new ArrayList<>();
 
     public ArrayList<Piece> getBoard() {
@@ -154,7 +155,6 @@ public class Model {
 
     public ArrayList<Point> getAvailableMovesSelectedBoardPiece(Piece p) {
         ArrayList<Point> tempMoves = new ArrayList<>();
-        // Probably have to do someting with currentplayer here later....
         Point origin = p.getCenter();
 
         int amount = Collections.frequency(getBoardAsPoints(), origin);
@@ -193,7 +193,7 @@ public class Model {
             }
         }
         // tempmoves now contains all surrounding points
-        // remove not allowed moves
+        // remove not allowed amountOfMovesMade
         return surrounding;
     }
 
@@ -398,8 +398,8 @@ public class Model {
         return new ArrayList(validPoints);
     }
 
-    public boolean isPlayAllowed(Hive.Tile tile, int q, int r){
-        
+    public boolean isPlayAllowed(Hive.Tile tile, int q, int r) {
+
         return false;
     }
 
@@ -473,19 +473,11 @@ public class Model {
         this.currentPlayer = currentPlayer;
     }
 
-    public ArrayList<Enum> getWhiteAvailablePieces() {
-        return whiteAvailablePieces;
+    public Player getWhite() {
+        return white;
     }
 
-    public void setWhiteAvailablePieces(ArrayList<Enum> whiteAvailablePieces) {
-        this.whiteAvailablePieces = whiteAvailablePieces;
-    }
-
-    public ArrayList<Enum> getBlackAvailablePieces() {
-        return blackAvailablePieces;
-    }
-
-    public void setBlackAvailablePieces(ArrayList<Enum> blackAvailablePieces) {
-        this.blackAvailablePieces = blackAvailablePieces;
+    public Player getBlack() {
+        return black;
     }
 }

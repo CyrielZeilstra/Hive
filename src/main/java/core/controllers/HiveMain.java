@@ -1,6 +1,5 @@
 package core.controllers;
 
-import core.components.ActivePlayer;
 import core.components.Model;
 import core.components.Piece;
 import nl.hanze.hive.Hive;
@@ -9,16 +8,10 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
 
 public class HiveMain implements Hive {
 
     public Model model;
-
-    public ActivePlayer whitePlayer = new ActivePlayer(false, 0);
-    public ActivePlayer blackPlayer = new ActivePlayer(false, 0);
-
-
     public HiveMain(Model m) {
         this.model = m;
     }
@@ -35,37 +28,37 @@ public class HiveMain implements Hive {
         for (Point p : model.getAvailablePlaySpots()) {
             Point modelPoint = new Point(p.x, p.y);
 
-            if (model.getCurrentPlayer() == Player.BLACK) {
+            if (model.getCurrentPlayer() == Hive.Player.BLACK) {
                 play((Tile) model.getSelectedPiece(), modelPoint.x, modelPoint.y);
 
-                model.getBlackAvailablePieces().remove(model.getSelectedPiece());
+                model.getBlack().getAvailablePieces().remove(model.getSelectedPiece());
             } else {
                 play((Tile) model.getSelectedPiece(), modelPoint.x, modelPoint.y);
 
                 if (model.getSelectedPiece() == Tile.QUEEN_BEE) {
-                    whitePlayer.setHasPlayedQueen(true);
+                    model.getWhite().setHasPlayedQueen(true);
                 }
-                model.getWhiteAvailablePieces().remove(model.getSelectedPiece());
+                model.getWhite().getAvailablePieces().remove(model.getSelectedPiece());
 
             }
         }
     }
 
     public void swapTurn() {
-        if (model.getCurrentPlayer() == Player.WHITE) {
+        if (model.getCurrentPlayer() == Hive.Player.WHITE) {
             System.out.println("Black Player it's your turn!");
-            model.setCurrentPlayer(Player.BLACK);
-            whitePlayer.addMove();
+            model.setCurrentPlayer(Hive.Player.BLACK);
+            model.getWhite().addMove();
 
             // check if player has placed the queen before move if not show only the queen
-            if (blackPlayer.getMoves() == 3 && !blackPlayer.hasPlayedQueen()) {
+            if (model.getBlack().getAmountOfMovesMade() == 3 && !model.getBlack().hasPlayedQueen()) {
                 List<Enum> blackQueen = Arrays.asList(Tile.QUEEN_BEE);
             }
-        } else if (model.getCurrentPlayer() == Player.BLACK) {
+        } else if (model.getCurrentPlayer() == Hive.Player.BLACK) {
             System.out.println("White Player it's your turn!");
-            model.setCurrentPlayer(Player.WHITE);
-            blackPlayer.addMove();
-            if (whitePlayer.getMoves() == 3 && !whitePlayer.hasPlayedQueen()) {
+            model.setCurrentPlayer(Hive.Player.WHITE);
+            model.getBlack().addMove();
+            if (model.getWhite().getAmountOfMovesMade() == 3 && !model.getWhite().hasPlayedQueen()) {
                 List<Enum> whiteQueen = Arrays.asList(Tile.QUEEN_BEE);
             }
 
@@ -79,16 +72,16 @@ public class HiveMain implements Hive {
             // valid move.
             model.getBoard().add(pec);
             Player p = model.getCurrentPlayer();
-            if (p == Player.BLACK) {
+            if (p == Hive.Player.BLACK) {
                 if (model.getSelectedPiece() == Tile.QUEEN_BEE) {
-                    blackPlayer.setHasPlayedQueen(true);
+                    model.getBlack().setHasPlayedQueen(true);
                 }
-                model.getBlackAvailablePieces().remove(tile);
+                model.getBlack().getAvailablePieces().remove(tile);
             } else {
                 if (model.getSelectedPiece() == Tile.QUEEN_BEE) {
-                    whitePlayer.setHasPlayedQueen(true);
+                    model.getWhite().setHasPlayedQueen(true);
                 }
-                model.getWhiteAvailablePieces().remove(tile);
+                model.getWhite().getAvailablePieces().remove(tile);
             }
             swapTurn();
         } else {
@@ -122,15 +115,15 @@ public class HiveMain implements Hive {
     public boolean playerCanPass() {
         int moves = model.getAvailablePlaySpots().size();
 
-        if (model.getCurrentPlayer() == Player.WHITE && whitePlayer.hasPlayedQueen()) {
+        if (model.getCurrentPlayer() == Hive.Player.WHITE && model.getWhite().hasPlayedQueen()) {
             for (Piece piece : model.getBoard()) {
-                if (piece.getPlayer() == Player.WHITE) {
+                if (piece.getPlayer() == Hive.Player.WHITE) {
                     moves = +model.getAvailableMovesSelectedBoardPiece(piece).size();
                 }
             }
-        } else if (blackPlayer.hasPlayedQueen()) {
+        } else if (model.getBlack().hasPlayedQueen()) {
             for (Piece piece : model.getBoard()) {
-                if (piece.getPlayer() == Player.BLACK) {
+                if (piece.getPlayer() == Hive.Player.BLACK) {
                     moves = +model.getAvailableMovesSelectedBoardPiece(piece).size();
                 }
             }
@@ -146,7 +139,7 @@ public class HiveMain implements Hive {
                 swapTurn();
             }
         } else {
-            throw new IllegalMove("You can't pass, because you have moves to play!");
+            throw new IllegalMove("You can't pass, because you have amountOfMovesMade to play!");
         }
     }
 
