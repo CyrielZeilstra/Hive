@@ -70,6 +70,7 @@ public class HiveMain implements Hive {
 
     @Override
     public void move(int fromQ, int fromR, int toQ, int toR) throws IllegalMove {
+
         ArrayList<Piece> piecesOnLocation = new ArrayList<>();
         for (Piece p : model.getBoard()) {
             if (p.getCenter().x == fromQ && p.getCenter().y == fromR) {
@@ -83,10 +84,12 @@ public class HiveMain implements Hive {
         lastpiece.setCenter(newPosition);
         model.getBoard().add(lastpiece);
 
-        if (!isWinner(model.getCurrentPlayer().getPlayerColor())) {
-            model.swapTurn();
-        } else {
-            System.out.println(model.getCurrentPlayer().getPlayerColor() + " wins!");
+        if (!isDraw()) {
+            // No draw
+            if (!isWinner(model.getCurrentPlayer().getPlayerColor())) {
+                // No win, swap turn
+                model.swapTurn();
+            }
         }
     }
 
@@ -123,20 +126,12 @@ public class HiveMain implements Hive {
 
     @Override
     public boolean isWinner(Player player) {
-        if (!isDraw()) {
-            for (Piece piece : model.getBoard()) {
-                if (piece.getPiece() == Tile.QUEEN_BEE) {
-                    if (model.getNeighbours(piece.getCenter()).size() == 6) {
-                        if (piece.getPlayer() != player) {
-                            return true;
-                        } else {
-                            return false;
-                        }
-                    }
+        for (Piece piece : model.getBoard()) {
+            if (piece.getPiece() == Tile.QUEEN_BEE) {
+                if (model.getNeighbours(piece.getCenter()).size() == 6) {
+                    return piece.getPlayer() != player;
                 }
             }
-        } else if (isDraw()) {
-            System.out.println("It's a draw!");
         }
         return false;
     }
