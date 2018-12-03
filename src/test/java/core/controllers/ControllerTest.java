@@ -130,15 +130,14 @@ public class ControllerTest {
         hive.play(Hive.Tile.SPIDER, 1, -1);
     }
 
-//    @DisplayName("4c can only play own pieces")
-//    @Test
-//    public void haveToPlayOnNewSpot() throws nl.hanze.hive.Hive.IllegalMove {
-//
-//        hive.play(Hive.Tile.QUEEN_BEE, 0, 0);
-//        expectedEx.expect(nl.hanze.hive.Hive.IllegalMove.class);
-//        expectedEx.expectMessage("Not a valid move.");
-//        hive.play(Hive.Tile.QUEEN_BEE, 0, 0);
-//    }
+    @DisplayName("4b Een speler speelt een steen door deze op een leeg vlak in het speelveld te leggen.")
+    @Test
+    public void haveToPlayOnNewSpot() throws nl.hanze.hive.Hive.IllegalMove {
+        hive.play(Hive.Tile.QUEEN_BEE, 5, 3);
+        exception.expect(nl.hanze.hive.Hive.IllegalMove.class);
+        exception.expectMessage("Not a valid play");
+        hive.play(Hive.Tile.QUEEN_BEE, 5, 3);
+    }
 //
 //    @DisplayName("4d can only play own pieces")
 //    @Test

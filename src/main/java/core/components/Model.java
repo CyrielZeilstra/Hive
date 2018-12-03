@@ -45,19 +45,6 @@ public class Model {
         }
     }
 
-    public ArrayList<Point> getAvailablePlaySpots() {
-        ArrayList<Point> moves = new ArrayList<>();
-        Point firstWhiteMove = new Point(0, 0);
-        if (board.size() < 2 && getCurrentPlayer().getPlayerColor() == WHITE) {
-            moves.add(firstWhiteMove);
-        } else if (board.size() < 2 && getCurrentPlayer().getPlayerColor() == BLACK) {
-            moves.addAll(getSurroundingPoints(firstWhiteMove));
-        } else {
-            moves.addAll(getAvailablePlays());
-        }
-        return moves;
-    }
-
     public int getAmountOfStonesOnPoint(Point p) {
         int amount = 0;
         for (Piece piece : board) {
@@ -218,32 +205,6 @@ public class Model {
         return surrounding;
     }
 
-    public ArrayList<Point> getAvailablePlays() {
-        ArrayList<Point> tempMoves = new ArrayList<>();
-        ArrayList<Point> pointsAlreadyOnBoard = getBoardAsPoints();
-        ArrayList<Point> otherPlayerMoves = new ArrayList<>();
-
-        for (Piece piece : board) {
-            ArrayList<Point> moves = getSurroundingPoints(piece.getCenter());
-            for (Point p : moves) {
-                if (getCurrentPlayer().getPlayerColor() != piece.getPlayer() && !pointsAlreadyOnBoard.contains(p)) {
-                    otherPlayerMoves.add(p);
-                }
-            }
-        }
-
-        for (Piece piece : board) {
-            ArrayList<Point> moves = getSurroundingPoints(piece.getCenter());
-            for (Point p : moves) {
-                if (getCurrentPlayer().getPlayerColor() == piece.getPlayer() && !otherPlayerMoves.contains(p) && !pointsAlreadyOnBoard.contains(p)) {
-                    tempMoves.add(p);
-                }
-            }
-        }
-
-        return tempMoves;
-    }
-
     public int getDistanceBetweenPoints(Point from, Point to) {
         return (int) Math.hypot(Math.abs(to.getY() - from.getY()), Math.abs(to.getX() - from.getX()));
     }
@@ -367,6 +328,54 @@ public class Model {
         return moves;
     }
 
+    public ArrayList<Point> getGrasshopperMoves(Point origin) {
+        ArrayList<Point> moves = new ArrayList<>();
+        ArrayList<Point> pointsAlreadyOnBoard = getBoardAsPoints();
+        ArrayList<Point> invalidMoves = new ArrayList<>();
+        ArrayList<Integer> invalidLines = new ArrayList<>();
+
+        for (Point invalidPoint : getSurroundingPoints(origin)) {
+            if (!pointsAlreadyOnBoard.contains(invalidPoint)) {
+                invalidMoves.add(invalidPoint);
+                invalidLines.add(getLineDirection(origin, invalidPoint));
+            }
+        }
+
+        for (Point p : getAllMoves()) {
+            if (!invalidMoves.contains(p)) {
+                if (getLineDirection(origin, p) == 6) {
+                    invalidMoves.add(p);
+                    invalidLines.add(getLineDirection(origin, p));
+                } else {
+                    if (moves.isEmpty()) {
+                        if (!invalidLines.contains(getLineDirection(origin, p)) && !breaksConnection(origin)) {
+                            moves.add(p);
+                        }
+                    } else {
+                        int pointsOnSameLine = 0;
+                        for (Point pointOnSameLine : moves) {
+                            if (getLineDirection(origin, p) == getLineDirection(origin, pointOnSameLine)) {
+                                pointsOnSameLine++;
+                                if (getDistanceBetweenPoints(origin, p) < getDistanceBetweenPoints(origin, pointOnSameLine)) {
+                                    if (!invalidLines.contains(getLineDirection(origin, p)) && !breaksConnection(origin)) {
+                                        moves.add(p);
+                                    }
+                                    moves.remove(pointOnSameLine);
+                                }
+                            }
+                        }
+                        if (pointsOnSameLine == 0) {
+                            if (!invalidLines.contains(getLineDirection(origin, p)) && !breaksConnection(origin)) {
+                                moves.add(p);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return moves;
+    }
+
     public ArrayList<Point> getQueenMoves(Point origin) {
         ArrayList<Point> moves = new ArrayList<>();
 
@@ -419,56 +428,41 @@ public class Model {
         return new ArrayList(validPoints);
     }
 
-    public boolean isPlayAllowed(int q, int r) {
-        return getAvailablePlaySpots().contains(new Point(q, r));
-    }
-
-    public ArrayList<Point> getGrasshopperMoves(Point origin) {
-        ArrayList<Point> moves = new ArrayList<>();
+    public ArrayList<Point> getAvailablePlays() {
+        ArrayList<Point> tempMoves = new ArrayList<>();
         ArrayList<Point> pointsAlreadyOnBoard = getBoardAsPoints();
-        ArrayList<Point> invalidMoves = new ArrayList<>();
-        ArrayList<Integer> invalidLines = new ArrayList<>();
+        ArrayList<Point> otherPlayerMoves = new ArrayList<>();
 
-        for (Point invalidPoint : getSurroundingPoints(origin)) {
-            if (!pointsAlreadyOnBoard.contains(invalidPoint)) {
-                invalidMoves.add(invalidPoint);
-                invalidLines.add(getLineDirection(origin, invalidPoint));
-            }
-        }
-
-        for (Point p : getAllMoves()) {
-            if (!invalidMoves.contains(p)) {
-                if (getLineDirection(origin, p) == 6) {
-                    invalidMoves.add(p);
-                    invalidLines.add(getLineDirection(origin, p));
-                } else {
-                    if (moves.isEmpty()) {
-                        if (!invalidLines.contains(getLineDirection(origin, p)) && !breaksConnection(origin)) {
-                            moves.add(p);
-                        }
-                    } else {
-                        int pointsOnSameLine = 0;
-                        for (Point pointOnSameLine : moves) {
-                            if (getLineDirection(origin, p) == getLineDirection(origin, pointOnSameLine)) {
-                                pointsOnSameLine++;
-                                if (getDistanceBetweenPoints(origin, p) < getDistanceBetweenPoints(origin, pointOnSameLine)) {
-                                    if (!invalidLines.contains(getLineDirection(origin, p)) && !breaksConnection(origin)) {
-                                        moves.add(p);
-                                    }
-                                    moves.remove(pointOnSameLine);
-                                }
-                            }
-                        }
-                        if (pointsOnSameLine == 0) {
-                            if (!invalidLines.contains(getLineDirection(origin, p)) && !breaksConnection(origin)) {
-                                moves.add(p);
-                            }
-                        }
-                    }
+        for (Piece piece : board) {
+            ArrayList<Point> moves = getSurroundingPoints(piece.getCenter());
+            for (Point p : moves) {
+                if (getCurrentPlayer().getPlayerColor() != piece.getPlayer() && !pointsAlreadyOnBoard.contains(p)) {
+                    otherPlayerMoves.add(p);
                 }
             }
         }
-        return moves;
+
+        for (Piece piece : board) {
+            ArrayList<Point> moves = getSurroundingPoints(piece.getCenter());
+            for (Point p : moves) {
+                if (getCurrentPlayer().getPlayerColor() == piece.getPlayer() && !otherPlayerMoves.contains(p) && !pointsAlreadyOnBoard.contains(p)) {
+                    tempMoves.add(p);
+                }
+            }
+        }
+
+        return tempMoves;
+    }
+
+    public boolean isPlayAllowed(int q, int r) {
+        if (getBoard().size() == 0) {
+            // first move always allowed
+            return true;
+        } else if (getBoard().size() == 1) {
+            return getSurroundingPoints(getBoard().get(0).getCenter()).contains(new Point(q, r));
+        } else {
+            return getAvailablePlays().contains(new Point(q, r));
+        }
     }
 
     public Piece createPiece(Hive.Tile tile, int q, int r) {

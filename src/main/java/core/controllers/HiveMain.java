@@ -53,7 +53,7 @@ public class HiveMain implements Hive {
             throw new IllegalMove("Player does not have this piece");
         }
         if (!model.isPlayAllowed(q, r)) {
-            throw new IllegalMove("Not a valid play.");
+            throw new IllegalMove("Not a valid play");
         }
         // valid move.
         model.getBoard().add(pec);
@@ -94,7 +94,7 @@ public class HiveMain implements Hive {
     }
 
     public boolean playerCanPass() {
-        int moves = model.getAvailablePlaySpots().size();
+        int moves = model.getAvailablePlays().size();
 
         if (model.getCurrentPlayer().getPlayerColor() == WHITE && model.getWhitePlayer().hasPlayedQueen()) {
             for (Piece piece : model.getBoard()) {
