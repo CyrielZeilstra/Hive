@@ -84,7 +84,7 @@ public class ControllerTest {
     @Test
     public void playerWinsIfQueenSurrounded() throws Hive.IllegalMove {
         hive.play(Hive.Tile.QUEEN_BEE, 0, 0);
-        hive.play(Hive.Tile.SOLDIER_ANT, -1, 0);
+        hive.play(Hive.Tile.QUEEN_BEE, -1, 0);
         hive.play(Hive.Tile.SOLDIER_ANT, 1, 0);
         hive.play(Hive.Tile.SOLDIER_ANT, -1, -1);
         hive.play(Hive.Tile.SOLDIER_ANT, 0, 1);
@@ -138,37 +138,46 @@ public class ControllerTest {
         exception.expectMessage("Not a valid play");
         hive.play(Hive.Tile.QUEEN_BEE, 5, 3);
     }
-//
-//    @DisplayName("4d can only play own pieces")
-//    @Test
-//    public void canOnlyPlayNextToOwnPieces() throws nl.hanze.hive.Hive.IllegalMove {
-//
-//        hive.play(Hive.Tile.QUEEN_BEE, 0, 0);
-//        hive.play(Hive.Tile.QUEEN_BEE, 1, 0);
-//        expectedEx.expect(nl.hanze.hive.Hive.IllegalMove.class);
-//        expectedEx.expectMessage("Not a valid move.");
-//        hive.play(Hive.Tile.QUEEN_BEE, 2, 0);
-//    }
-//
-//    @DisplayName("4e player is forced to play queen after 3 amountOfMovesMade.")
-//    @Test
-//    public void forcePlayerToPlayQueenAfterThreeMoves() throws nl.hanze.hive.Hive.IllegalMove {
-//
-//        //1
-//        hive.play(Hive.Tile.SOLDIER_ANT, 0, 0);
-//        hive.play(Hive.Tile.SOLDIER_ANT, 1, 0);
-//        //2
-//        hive.play(Hive.Tile.SOLDIER_ANT, -1, 0);
-//        hive.play(Hive.Tile.SOLDIER_ANT, 2, 0);
-//        //3
-//        hive.play(Hive.Tile.SOLDIER_ANT, -2, 0);
-//        hive.play(Hive.Tile.SOLDIER_ANT, 3, 0);
-//        //4
-//        expectedEx.expect(nl.hanze.hive.Hive.IllegalMove.class);
-//        expectedEx.expectMessage("Not a valid move.");
-//        hive.play(Hive.Tile.BEETLE, -3, 0);
-//    }
-//
+
+    @DisplayName("4c Als er al stenen op het bord liggen moet een naast een andere steen gespeeld worden")
+    @Test
+    public void canOnlyPlayNextToOwnPieces() throws nl.hanze.hive.Hive.IllegalMove {
+
+        hive.play(Hive.Tile.QUEEN_BEE, 50, 50);
+        exception.expect(nl.hanze.hive.Hive.IllegalMove.class);
+        exception.expectMessage("Not a valid play");
+        hive.play(Hive.Tile.QUEEN_BEE, 5, 5);
+    }
+
+    @DisplayName("4d Als er stenen van beide spelers op het bord liggen mag een steen niet naast een steen van de tegenstander geplaatst worden")
+    @Test
+    public void canOnlyPlayIfNotTouchingOtherPlayer() throws nl.hanze.hive.Hive.IllegalMove {
+        hive.play(Hive.Tile.QUEEN_BEE, 0, 0);
+        hive.play(Hive.Tile.QUEEN_BEE, -1, 0);
+        hive.play(Hive.Tile.SOLDIER_ANT, 1, -1);
+        exception.expect(nl.hanze.hive.Hive.IllegalMove.class);
+        exception.expectMessage("Not a valid play");
+        hive.play(Hive.Tile.SOLDIER_ANT, 1, 0);
+    }
+
+    @DisplayName("4e player is forced to play queen after 3 amountOfMovesMade.")
+    @Test
+    public void forcePlayerToPlayQueenAfterThreeMoves() throws nl.hanze.hive.Hive.IllegalMove {
+        //1
+        hive.play(Hive.Tile.SOLDIER_ANT, 0, 0);
+        hive.play(Hive.Tile.SOLDIER_ANT, 1, 0);
+        //2
+        hive.play(Hive.Tile.SOLDIER_ANT, -1, 0);
+        hive.play(Hive.Tile.SOLDIER_ANT, 2, 0);
+        //3
+        hive.play(Hive.Tile.SOLDIER_ANT, -2, 0);
+        hive.play(Hive.Tile.SOLDIER_ANT, 3, 0);
+        //4
+        exception.expect(nl.hanze.hive.Hive.IllegalMove.class);
+        exception.expectMessage("Need to play Queen after 3 move");
+        hive.play(Hive.Tile.BEETLE, -3, 0);
+    }
+
 //    @DisplayName("5a PlayerModel can only move played pieces")
 //    @Test
 //    public void cannotImmidiatlyMove() throws nl.hanze.hive.Hive.IllegalMove {

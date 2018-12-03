@@ -55,10 +55,6 @@ public class PlayerModel {
         this.availableTiles = availableTiles;
     }
 
-    public boolean isHasPlayedQueen() {
-        return hasPlayedQueen;
-    }
-
     public Hive.Player getPlayerColor() {
         return playerColor;
     }
