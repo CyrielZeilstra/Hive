@@ -75,7 +75,15 @@ public class ControllerTest {
     @Test
     public void playerWinsIfQueenSurrounded() throws Hive.IllegalMove {
         hive.play(Hive.Tile.QUEEN_BEE, 0, 0);
-        hive.play(Hive.Tile.SOLDIER_ANT, 0, -1);
+        hive.play(Hive.Tile.SOLDIER_ANT, -1, 0);
+        hive.play(Hive.Tile.SOLDIER_ANT, 1, 0);
+        hive.play(Hive.Tile.SOLDIER_ANT, -1, -1);
+        hive.play(Hive.Tile.SOLDIER_ANT, 0, 1);
+        hive.play(Hive.Tile.SOLDIER_ANT, -2, 1);
+        hive.play(Hive.Tile.SOLDIER_ANT, 1, -1);
+        hive.move(-1, -1, 0, -1);
+        hive.play(Hive.Tile.SOLDIER_ANT, 2, 0);
+        hive.move(-2, 1, -1, 1);
         assertTrue("black wins", hive.isWinner(Hive.Player.BLACK));
     }
 
@@ -83,7 +91,19 @@ public class ControllerTest {
     @Test
     public void gameIsDrawIfBothQueensAreSurrounded() throws Hive.IllegalMove {
         hive.play(Hive.Tile.QUEEN_BEE, 0, 0);
-        assertTrue("black wins", hive.isWinner(Hive.Player.BLACK));
+        hive.play(Hive.Tile.QUEEN_BEE, -1, 0);
+        hive.play(Hive.Tile.SOLDIER_ANT, 1, 0);
+        hive.play(Hive.Tile.SOLDIER_ANT, -1, -1);
+        hive.play(Hive.Tile.SOLDIER_ANT, 0, 1);
+        hive.play(Hive.Tile.SOLDIER_ANT, -2, 1);
+        hive.play(Hive.Tile.SOLDIER_ANT, 1, -1);
+        hive.play(Hive.Tile.SOLDIER_ANT, -2, 0);
+        hive.play(Hive.Tile.BEETLE, 1, -2);
+        hive.move(-2, 1, -1, 1);
+        hive.play(Hive.Tile.BEETLE, 2, 0);
+        hive.play(Hive.Tile.BEETLE, -2, 1);
+        hive.move(1, -2, 0, -1);
+        assertTrue("draw", hive.isDraw());
     }
 
 

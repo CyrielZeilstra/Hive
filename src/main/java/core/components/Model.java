@@ -14,13 +14,8 @@ import static nl.hanze.hive.Hive.Tile.*;
 
 public class Model {
 
-    public ArrayList<Hive.Tile> pieces = new ArrayList<>(Arrays.asList(QUEEN_BEE,
-            SPIDER, SPIDER,
-            BEETLE, BEETLE,
-            GRASSHOPPER, GRASSHOPPER, GRASSHOPPER,
-            SOLDIER_ANT, SOLDIER_ANT, SOLDIER_ANT));
-    private PlayerModel whitePlayer = new PlayerModel(false, 0, WHITE, pieces);
-    private PlayerModel blackPlayer = new PlayerModel(false, 0, BLACK, pieces);
+    private PlayerModel whitePlayer = new PlayerModel(false, 0, WHITE);
+    private PlayerModel blackPlayer = new PlayerModel(false, 0, BLACK);
     private PlayerModel currentPlayer = whitePlayer;
 
     private ArrayList<Piece> board = new ArrayList<>();
@@ -84,7 +79,7 @@ public class Model {
     public boolean breaksConnection(Point from) {
         ArrayList<Point> temp = getBoardAsPoints();
         temp.remove(from);
-        if (temp.size() <= 2){
+        if (temp.size() <= 2) {
             return false;
         }
         Set<Point> boardAfterMove = new HashSet<Point>(temp);
@@ -424,9 +419,8 @@ public class Model {
         return new ArrayList(validPoints);
     }
 
-    public boolean isPlayAllowed(Hive.Tile tile, int q, int r) {
-
-        return false;
+    public boolean isPlayAllowed(int q, int r) {
+        return getAvailablePlaySpots().contains(new Point(q, r));
     }
 
     public ArrayList<Point> getGrasshopperMoves(Point origin) {
