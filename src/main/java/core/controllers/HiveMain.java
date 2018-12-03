@@ -30,17 +30,17 @@ public class HiveMain implements Hive {
 //        for (Point p : model.getAvailablePlaySpots()) {
 //            Point modelPoint = new Point(p.x, p.y);
 //
-//            if (model.getCurrentPlayerModel() == Hive.PlayerModel.BLACK) {
+//            if (model.getCurrentPlayer() == Hive.PlayerModel.BLACK) {
 //                play((Tile) model.getSelectedPiece(), modelPoint.x, modelPoint.y);
 //
-//                model.getBlackPlayerModel().getAvailablePieces().remove(model.getSelectedPiece());
+//                model.getBlackPlayer().getAvailableTiles().remove(model.getSelectedPiece());
 //            } else {
 //                play((Tile) model.getSelectedPiece(), modelPoint.x, modelPoint.y);
 //
 //                if (model.getSelectedPiece() == Tile.QUEEN_BEE) {
-//                    model.getWhitePlayerModel().setHasPlayedQueen(true);
+//                    model.getWhitePlayer().setHasPlayedQueen(true);
 //                }
-//                model.getWhitePlayerModel().getAvailablePieces().remove(model.getSelectedPiece());
+//                model.getWhitePlayer().getAvailableTiles().remove(model.getSelectedPiece());
 //
 //            }
 //        }
@@ -52,16 +52,12 @@ public class HiveMain implements Hive {
         if (model.getAvailableMovesSelectedBoardPiece(pec).contains(new Point(q, r)) || model.getAvailablePlaySpots().contains(new Point(q, r))) {
             // valid move.
             model.getBoard().add(pec);
-            if (model.getCurrentPlayerModel().getPlayerColor() == BLACK) {
-                if (model.getSelectedPiece() == Tile.QUEEN_BEE) {
-                    model.getBlackPlayerModel().setHasPlayedQueen(true);
-                }
-                model.getBlackPlayerModel().getAvailablePieces().remove(tile);
+            if (model.getCurrentPlayer().getPlayerColor() == BLACK) {
+                model.getBlackPlayer().getAvailableTiles().remove(tile);
+                model.getBlackPlayer().getPlayedPieces().add(pec);
             } else {
-                if (model.getSelectedPiece() == Tile.QUEEN_BEE) {
-                    model.getWhitePlayerModel().setHasPlayedQueen(true);
-                }
-                model.getWhitePlayerModel().getAvailablePieces().remove(tile);
+                model.getWhitePlayer().getAvailableTiles().remove(tile);
+                model.getWhitePlayer().getPlayedPieces().add(pec);
             }
             model.swapTurn();
         } else {
@@ -85,23 +81,23 @@ public class HiveMain implements Hive {
         lastpiece.setCenter(newPosition);
         model.getBoard().add(lastpiece);
 
-        if (!isWinner(model.getCurrentPlayerModel().getPlayerColor())) {
+        if (!isWinner(model.getCurrentPlayer().getPlayerColor())) {
             model.swapTurn();
         } else {
-            System.exit(1);
+            System.out.println(model.getCurrentPlayer().getPlayerColor() + " wins!");
         }
     }
 
     public boolean playerCanPass() {
         int moves = model.getAvailablePlaySpots().size();
 
-        if (model.getCurrentPlayerModel().getPlayerColor() == WHITE && model.getWhitePlayerModel().hasPlayedQueen()) {
+        if (model.getCurrentPlayer().getPlayerColor() == WHITE && model.getWhitePlayer().hasPlayedQueen()) {
             for (Piece piece : model.getBoard()) {
                 if (piece.getPlayer() == WHITE) {
                     moves = +model.getAvailableMovesSelectedBoardPiece(piece).size();
                 }
             }
-        } else if (model.getBlackPlayerModel().hasPlayedQueen()) {
+        } else if (model.getBlackPlayer().hasPlayedQueen()) {
             for (Piece piece : model.getBoard()) {
                 if (piece.getPlayer() == BLACK) {
                     moves = +model.getAvailableMovesSelectedBoardPiece(piece).size();
@@ -115,7 +111,7 @@ public class HiveMain implements Hive {
     @Override
     public void pass() throws IllegalMove {
         if (playerCanPass()) {
-            if (!isWinner(model.getCurrentPlayerModel().getPlayerColor())) {
+            if (!isWinner(model.getCurrentPlayer().getPlayerColor())) {
                 model.swapTurn();
             }
         } else {
@@ -129,7 +125,7 @@ public class HiveMain implements Hive {
             for (Piece piece : model.getBoard()) {
                 if (piece.getPiece() == Tile.QUEEN_BEE) {
                     if (model.getNeighbours(piece.getCenter()).size() == 6) {
-                        if (piece.getPlayer() == player) {
+                        if (piece.getPlayer() != player) {
                             return true;
                         } else {
                             return false;

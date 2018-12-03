@@ -14,16 +14,14 @@ import static nl.hanze.hive.Hive.Tile.*;
 
 public class Model {
 
-    private Enum selectedPiece;
-    public List<Hive.Tile> pieces = Arrays.asList(QUEEN_BEE,
+    public ArrayList<Hive.Tile> pieces = new ArrayList<>(Arrays.asList(QUEEN_BEE,
             SPIDER, SPIDER,
             BEETLE, BEETLE,
             GRASSHOPPER, GRASSHOPPER, GRASSHOPPER,
-            SOLDIER_ANT, SOLDIER_ANT, SOLDIER_ANT);
-    private PlayerModel whitePlayerModel = new PlayerModel(false, 0, WHITE, pieces);
-    private PlayerModel blackPlayerModel = new PlayerModel(false, 0, BLACK, pieces);
-    private PlayerModel currentPlayerModel = whitePlayerModel;
-
+            SOLDIER_ANT, SOLDIER_ANT, SOLDIER_ANT));
+    private PlayerModel whitePlayer = new PlayerModel(false, 0, WHITE, pieces);
+    private PlayerModel blackPlayer = new PlayerModel(false, 0, BLACK, pieces);
+    private PlayerModel currentPlayer = whitePlayer;
 
     private ArrayList<Piece> board = new ArrayList<>();
 
@@ -32,20 +30,20 @@ public class Model {
     }
 
     public void swapTurn() {
-        if (getCurrentPlayerModel().getPlayerColor() == WHITE) {
+        if (getCurrentPlayer().getPlayerColor() == WHITE) {
             System.out.println("Black PlayerModel it's your turn!");
-            whitePlayerModel.addMove();
-            setCurrentPlayerModel(blackPlayerModel);
+            whitePlayer.addMove();
+            setCurrentPlayer(blackPlayer);
             // check if player has placed the queen before move if not show only the queen
-            if (getBlackPlayerModel().getAmountOfMovesMade() == 3 && !getBlackPlayerModel().hasPlayedQueen()) {
+            if (getBlackPlayer().getAmountOfMovesMade() == 3 && !getBlackPlayer().hasPlayedQueen()) {
                 List<Enum> blackQueen = Arrays.asList(Hive.Tile.QUEEN_BEE);
             }
-        } else if (getCurrentPlayerModel().getPlayerColor() == BLACK) {
+        } else if (getCurrentPlayer().getPlayerColor() == BLACK) {
             System.out.println("White PlayerModel it's your turn!");
-            getBlackPlayerModel().addMove();
-            setCurrentPlayerModel(whitePlayerModel);
+            getBlackPlayer().addMove();
+            setCurrentPlayer(whitePlayer);
 
-            if (getWhitePlayerModel().getAmountOfMovesMade() == 3 && !getWhitePlayerModel().hasPlayedQueen()) {
+            if (getWhitePlayer().getAmountOfMovesMade() == 3 && !getWhitePlayer().hasPlayedQueen()) {
                 List<Enum> whiteQueen = Arrays.asList(Hive.Tile.QUEEN_BEE);
             }
 
@@ -55,9 +53,9 @@ public class Model {
     public ArrayList<Point> getAvailablePlaySpots() {
         ArrayList<Point> moves = new ArrayList<>();
         Point firstWhiteMove = new Point(0, 0);
-        if (board.size() < 2 && getCurrentPlayerModel().getPlayerColor() == WHITE) {
+        if (board.size() < 2 && getCurrentPlayer().getPlayerColor() == WHITE) {
             moves.add(firstWhiteMove);
-        } else if (board.size() < 2 && getCurrentPlayerModel().getPlayerColor() == BLACK) {
+        } else if (board.size() < 2 && getCurrentPlayer().getPlayerColor() == BLACK) {
             moves.addAll(getSurroundingPoints(firstWhiteMove));
         } else {
             moves.addAll(getAvailablePlays());
@@ -86,6 +84,9 @@ public class Model {
     public boolean breaksConnection(Point from) {
         ArrayList<Point> temp = getBoardAsPoints();
         temp.remove(from);
+        if (temp.size() <= 2){
+            return false;
+        }
         Set<Point> boardAfterMove = new HashSet<Point>(temp);
         ArrayList<Point> connections = new ArrayList<Point>();
 
@@ -230,7 +231,7 @@ public class Model {
         for (Piece piece : board) {
             ArrayList<Point> moves = getSurroundingPoints(piece.getCenter());
             for (Point p : moves) {
-                if (getCurrentPlayerModel().getPlayerColor() != piece.getPlayer() && !pointsAlreadyOnBoard.contains(p)) {
+                if (getCurrentPlayer().getPlayerColor() != piece.getPlayer() && !pointsAlreadyOnBoard.contains(p)) {
                     otherPlayerMoves.add(p);
                 }
             }
@@ -239,7 +240,7 @@ public class Model {
         for (Piece piece : board) {
             ArrayList<Point> moves = getSurroundingPoints(piece.getCenter());
             for (Point p : moves) {
-                if (getCurrentPlayerModel().getPlayerColor() == piece.getPlayer() && !otherPlayerMoves.contains(p) && !pointsAlreadyOnBoard.contains(p)) {
+                if (getCurrentPlayer().getPlayerColor() == piece.getPlayer() && !otherPlayerMoves.contains(p) && !pointsAlreadyOnBoard.contains(p)) {
                     tempMoves.add(p);
                 }
             }
@@ -478,31 +479,23 @@ public class Model {
 
     public Piece createPiece(Hive.Tile tile, int q, int r) {
         Piece pieceToPlay;
-        pieceToPlay = new Piece(q, r, currentPlayerModel.getPlayerColor(), tile);
+        pieceToPlay = new Piece(q, r, currentPlayer.getPlayerColor(), tile);
         return pieceToPlay;
     }
 
-    public Enum getSelectedPiece() {
-        return selectedPiece;
+    public PlayerModel getWhitePlayer() {
+        return whitePlayer;
     }
 
-    public void setSelectedPiece(Enum selectedPiece) {
-        this.selectedPiece = selectedPiece;
+    public PlayerModel getBlackPlayer() {
+        return blackPlayer;
     }
 
-    public PlayerModel getWhitePlayerModel() {
-        return whitePlayerModel;
+    public PlayerModel getCurrentPlayer() {
+        return currentPlayer;
     }
 
-    public PlayerModel getBlackPlayerModel() {
-        return blackPlayerModel;
-    }
-
-    public PlayerModel getCurrentPlayerModel() {
-        return currentPlayerModel;
-    }
-
-    public void setCurrentPlayerModel(PlayerModel currentPlayerModel) {
-        this.currentPlayerModel = currentPlayerModel;
+    public void setCurrentPlayer(PlayerModel currentPlayer) {
+        this.currentPlayer = currentPlayer;
     }
 }

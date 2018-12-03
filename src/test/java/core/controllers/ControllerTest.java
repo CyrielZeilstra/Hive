@@ -11,8 +11,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.rules.ExpectedException;
 
 import java.awt.*;
-import java.util.Arrays;
-import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -52,65 +50,42 @@ public class ControllerTest {
     @Test
     public void whenTilesAreStackedOnlyTopTileCanMove() throws Hive.IllegalMove {
         hive.play(Hive.Tile.QUEEN_BEE, 0, 0);
-        hive.play(Hive.Tile.BEETLE, 0, 0);
-
-        hive.move(0,0,1,1);
+        hive.play(Hive.Tile.BEETLE, 0, 1);
+        hive.move(0, 0, 0, 1);
         expectedEx.expect(nl.hanze.hive.Hive.IllegalMove.class);
         expectedEx.expectMessage("Not a valid move.");
-
     }
 
     @DisplayName("3a White plays first")
     @Test
     public void whitePlaysFirst() {
+        assertEquals("White amountOfMovesMade first", Hive.Player.WHITE, hive.model.getCurrentPlayer());
+    }
 
-        assertEquals("White amountOfMovesMade first", Hive.Player.WHITE, hive.model.getCurrentPlayerModel());
+    @DisplayName("3b turn swaps after every move,pass or play")
+    @Test
+    public void moveSwapsWhenNeeded() throws Hive.IllegalMove {
+        hive.play(Hive.Tile.QUEEN_BEE, 0, 0);
+        assertEquals(Hive.Player.BLACK, hive.model.getCurrentPlayer().getPlayerColor());
+        hive.play(Hive.Tile.SOLDIER_ANT, 1, 0);
+        assertEquals(Hive.Player.WHITE, hive.model.getCurrentPlayer().getPlayerColor());
     }
 
     @DisplayName("3c player wins if Queen surrounded")
     @Test
-    public void playerWinsIfQueenSurrounded() {
-
-        Piece Queen = new Piece(0, 0, Hive.Player.WHITE, Hive.Tile.QUEEN_BEE);
-        Piece Beetle1 = new Piece(-1, 0, Hive.Player.BLACK, Hive.Tile.BEETLE);
-        Piece Beetle2 = new Piece(0, -1, Hive.Player.BLACK, Hive.Tile.BEETLE);
-        Piece Beetle3 = new Piece(1, -1, Hive.Player.BLACK, Hive.Tile.BEETLE);
-        Piece Beetle4 = new Piece(1, 0, Hive.Player.BLACK, Hive.Tile.BEETLE);
-        Piece Beetle5 = new Piece(0, 1, Hive.Player.BLACK, Hive.Tile.BEETLE);
-        Piece Beetle6 = new Piece(-1, 1, Hive.Player.BLACK, Hive.Tile.BEETLE);
-        hive.model.getBoard().add(Queen);
-        hive.model.getBoard().add(Beetle1);
-        hive.model.getBoard().add(Beetle2);
-        hive.model.getBoard().add(Beetle3);
-        hive.model.getBoard().add(Beetle4);
-        hive.model.getBoard().add(Beetle5);
-        hive.model.getBoard().add(Beetle6);
+    public void playerWinsIfQueenSurrounded() throws Hive.IllegalMove {
+        hive.play(Hive.Tile.QUEEN_BEE, 0, 0);
+        hive.play(Hive.Tile.SOLDIER_ANT, 0, -1);
         assertTrue("black wins", hive.isWinner(Hive.Player.BLACK));
     }
 
-    @DisplayName("3d draw if both Queen's surrounded")
+    @DisplayName("3d game draws if both queens are surrounded after move.")
     @Test
-    public void drawIfBothQueensSurrounded() {
-
-        Piece Queen1 = new Piece(0, 0, Hive.Player.WHITE, Hive.Tile.QUEEN_BEE);
-        Piece Queen2 = new Piece(0, 0, Hive.Player.BLACK, Hive.Tile.QUEEN_BEE);
-        Piece Beetle1 = new Piece(-1, 0, Hive.Player.BLACK, Hive.Tile.BEETLE);
-        Piece Beetle2 = new Piece(0, -1, Hive.Player.BLACK, Hive.Tile.BEETLE);
-        Piece Beetle3 = new Piece(1, -1, Hive.Player.BLACK, Hive.Tile.BEETLE);
-        Piece Beetle4 = new Piece(1, 0, Hive.Player.BLACK, Hive.Tile.BEETLE);
-        Piece Beetle5 = new Piece(0, 1, Hive.Player.BLACK, Hive.Tile.BEETLE);
-        Piece Beetle6 = new Piece(-1, 1, Hive.Player.BLACK, Hive.Tile.BEETLE);
-        hive.model.getBoard().add(Queen1);
-        hive.model.getBoard().add(Queen2);
-        hive.model.getBoard().add(Beetle1);
-        hive.model.getBoard().add(Beetle2);
-        hive.model.getBoard().add(Beetle3);
-        hive.model.getBoard().add(Beetle4);
-        hive.model.getBoard().add(Beetle5);
-        hive.model.getBoard().add(Beetle6);
-        assertFalse(hive.isWinner(Hive.Player.BLACK));
-        assertFalse(hive.isWinner(Hive.Player.WHITE));
+    public void gameIsDrawIfBothQueensAreSurrounded() throws Hive.IllegalMove {
+        hive.play(Hive.Tile.QUEEN_BEE, 0, 0);
+        assertTrue("black wins", hive.isWinner(Hive.Player.BLACK));
     }
+
 
     @Rule
     public ExpectedException expectedEx = ExpectedException.none();
@@ -212,8 +187,8 @@ public class ControllerTest {
 //    @DisplayName("12 PlayerModel can only pass if amountOfMovesMade = 0")
 //    @Test
 //    public void passTest() throws Hive.IllegalMove {
-//        Hive.Player player = hive.model.getCurrentPlayerModel();
+//        Hive.Player player = hive.model.getCurrentPlayer();
 //        hive.pass();
-//        assertTrue(hive.model.getCurrentPlayerModel() == player);
+//        assertTrue(hive.model.getCurrentPlayer() == player);
 //    }
 }
