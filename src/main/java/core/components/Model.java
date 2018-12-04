@@ -454,6 +454,22 @@ public class Model {
         return tempMoves;
     }
 
+    public Hive.Player getCorrespondingPlayerByPiece(int q, int r) {
+        // if stacked return movable top.
+        Point pointToFind = new Point(q, r);
+        ArrayList<Piece> piecesAtLocation = new ArrayList();
+        for (Piece p : getBoard()) {
+            if (p.getCenter().equals(pointToFind)) {
+                piecesAtLocation.add(p);
+            }
+        }
+        if (piecesAtLocation.size() > 1) {
+            return piecesAtLocation.get(piecesAtLocation.size() - 1).getPlayer();
+        } else {
+            return piecesAtLocation.get(0).getPlayer();
+        }
+    }
+
     public boolean isPlayAllowed(int q, int r) {
         if (getBoard().size() == 0) {
             // first move always allowed
