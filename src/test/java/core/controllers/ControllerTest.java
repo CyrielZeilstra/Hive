@@ -208,16 +208,18 @@ public class ControllerTest {
         hive.play(Hive.Tile.BEETLE, 1, 1);
         hive.move(-2, 0, -2, 1);
     }
-//
-//    @DisplayName("5d piece has to be in contact after move")
-//    @Test
-//    public void pieceMoveDoesNotCreateIsland() throws nl.hanze.hive.Hive.IllegalMove {
-//
-//        hive.play(Hive.Tile.QUEEN_BEE, 0, 0);
-//        hive.play(Hive.Tile.QUEEN_BEE, 1, 0);
-//        hive.move(1, 0, 5, 5);
-//        assertTrue(hive.model.breaksConnection(new Point(0, 0)));
-//    }
+
+    @DisplayName("5c Een steen moet na het verplaatsen in contact zijn met minstens één andere steen.")
+    @Test
+    public void pieceMoveDoesNotCreateIsland() throws nl.hanze.hive.Hive.IllegalMove {
+        hive.play(Hive.Tile.QUEEN_BEE, 0, 0);
+        hive.play(Hive.Tile.QUEEN_BEE, -1, 0);
+        hive.play(Hive.Tile.SOLDIER_ANT, 1, 0);
+        hive.play(Hive.Tile.SOLDIER_ANT, -1, -1);
+        exception.expect(nl.hanze.hive.Hive.IllegalMove.class);
+        exception.expectMessage("Move breaks connection");
+        hive.move(1, 0, 2, 0);
+    }
 //
 //
 //    @DisplayName("6b can piece slip in")

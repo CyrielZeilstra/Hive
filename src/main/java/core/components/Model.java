@@ -258,9 +258,13 @@ public class Model {
         return moves;
     }
 
-    public Boolean isFloatingPiece(Point p, ArrayList<Point> board) {
-        for (Point e : getSurroundingPoints(p)) {
-            if (board.contains(e)) {
+    public Boolean isFloatingPiece(Point pFrom, Point pTo) {
+        ArrayList<Point> tempBoard = getBoardAsPoints();
+        tempBoard.remove(pFrom);
+        tempBoard.add(pTo);
+        ArrayList<Point> checkMe = getSurroundingPoints(pTo);
+        for (Point surrPoint : checkMe) {
+            if (tempBoard.contains(surrPoint)) {
                 return false;
             }
         }
@@ -270,7 +274,7 @@ public class Model {
     public ArrayList<Point> getSpiderMoves(Point origin) {
         Set<Point> firstPoints = new HashSet<>();
         for (Point p1 : getSurroundingPoints(origin)) {
-            if (!breaksConnection(origin) && isTouchingMove(origin, p1) && canSlideIn(origin, p1) && !getBoardAsPoints().contains(p1)) {
+            if (isTouchingMove(origin, p1) && canSlideIn(origin, p1) && !getBoardAsPoints().contains(p1)) {
                 firstPoints.add(p1);
             }
         }
@@ -283,7 +287,7 @@ public class Model {
                     ArrayList<Point> tempboard = new ArrayList<>(getBoardAsPoints());
                     tempboard.remove(origin);
                     tempboard.add(p3);
-                    if (!isFloatingPiece(p3, tempboard) && !firstPoints.contains(p3) && isTouchingMoveCustomBoard(p2, p3, tempboard)) {
+                    if (!firstPoints.contains(p3) && isTouchingMoveCustomBoard(p2, p3, tempboard)) {
                         secondPoints.add(p3);
                     }
                 }
@@ -298,7 +302,7 @@ public class Model {
                     ArrayList<Point> tempboard = new ArrayList<>(getBoardAsPoints());
                     tempboard.remove(origin);
                     tempboard.add(p4);
-                    if (!isFloatingPiece(p4, tempboard) && !firstPoints.contains(p4) && !secondPoints.contains(p4) && isTouchingMoveCustomBoard(p3, p4, tempboard)) {
+                    if (!firstPoints.contains(p4) && !secondPoints.contains(p4) && isTouchingMoveCustomBoard(p3, p4, tempboard)) {
                         thirdPoints.add(p4);
                     }
                 }
@@ -314,15 +318,12 @@ public class Model {
             ArrayList<Point> tempboard = new ArrayList<>(getBoardAsPoints());
             tempboard.remove(origin);
             tempboard.add(move);
-            if (!breaksConnection(origin) && !isFloatingPiece(move, tempboard)) {
-                if (Collections.frequency(getBoardAsPoints(), origin) > 1) {
+            if (Collections.frequency(getBoardAsPoints(), origin) > 1) {
+                moves.add(move);
+            } else {
+                if (isTouchingMoveCustomBoard(origin, move, tempboard) || getBoardAsPoints().contains(move)) {
                     moves.add(move);
-                } else {
-                    if (isTouchingMoveCustomBoard(origin, move, tempboard) || getBoardAsPoints().contains(move)) {
-                        moves.add(move);
-                    }
                 }
-
             }
         }
         return moves;
@@ -348,7 +349,7 @@ public class Model {
                     invalidLines.add(getLineDirection(origin, p));
                 } else {
                     if (moves.isEmpty()) {
-                        if (!invalidLines.contains(getLineDirection(origin, p)) && !breaksConnection(origin)) {
+                        if (!invalidLines.contains(getLineDirection(origin, p))) {
                             moves.add(p);
                         }
                     } else {
@@ -357,7 +358,7 @@ public class Model {
                             if (getLineDirection(origin, p) == getLineDirection(origin, pointOnSameLine)) {
                                 pointsOnSameLine++;
                                 if (getDistanceBetweenPoints(origin, p) < getDistanceBetweenPoints(origin, pointOnSameLine)) {
-                                    if (!invalidLines.contains(getLineDirection(origin, p)) && !breaksConnection(origin)) {
+                                    if (!invalidLines.contains(getLineDirection(origin, p))) {
                                         moves.add(p);
                                     }
                                     moves.remove(pointOnSameLine);
@@ -365,7 +366,7 @@ public class Model {
                             }
                         }
                         if (pointsOnSameLine == 0) {
-                            if (!invalidLines.contains(getLineDirection(origin, p)) && !breaksConnection(origin)) {
+                            if (!invalidLines.contains(getLineDirection(origin, p))) {
                                 moves.add(p);
                             }
                         }
@@ -383,7 +384,7 @@ public class Model {
             ArrayList<Point> tempboard = new ArrayList<>(getBoardAsPoints());
             tempboard.remove(origin);
             tempboard.add(p);
-            if (!getBoardAsPoints().contains(p) && canSlideIn(origin, p) && !isFloatingPiece(p, tempboard) && isTouchingMoveCustomBoard(origin, p, tempboard) && !breaksConnection(origin)) {
+            if (!getBoardAsPoints().contains(p) && canSlideIn(origin, p) && isTouchingMoveCustomBoard(origin, p, tempboard)) {
                 moves.add(p);
             }
         }
@@ -398,7 +399,7 @@ public class Model {
             ArrayList<Point> tempboard = new ArrayList<>(getBoardAsPoints());
             tempboard.remove(origin);
             tempboard.add(p);
-            if (!getBoardAsPoints().contains(p) && canSlideIn(origin, p) && !isFloatingPiece(p, tempboard) && isTouchingMoveCustomBoard(origin, p, tempboard) && !breaksConnection(origin)) {
+            if (!getBoardAsPoints().contains(p) && canSlideIn(origin, p) && isTouchingMoveCustomBoard(origin, p, tempboard)) {
                 validSurroundingPoints.add(p);
             }
         }
@@ -420,7 +421,7 @@ public class Model {
 
     public ArrayList<Point> recursiveAntSearch(Point curPos, ArrayList<Point> board, Set<Point> validPoints) {
         for (Point x : getSurroundingPoints(curPos)) {
-            if (!getBoardAsPoints().contains(x) && !isFloatingPiece(x, board) && !validPoints.contains(x) && !isFloatingPiece(x, board) && canSlideIn(curPos, x)) {
+            if (!getBoardAsPoints().contains(x) && !validPoints.contains(x) && canSlideIn(curPos, x)) {
                 validPoints.add(x);
                 recursiveAntSearch(x, board, validPoints);
             }

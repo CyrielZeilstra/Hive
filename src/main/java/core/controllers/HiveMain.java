@@ -52,12 +52,16 @@ public class HiveMain implements Hive {
     @Override
     public void move(int fromQ, int fromR, int toQ, int toR) throws IllegalMove {
         // Player can only move his own pieces.
-        if (model.getCorrespondingPlayerByPiece(fromQ, fromR) != model.getCurrentPlayer().getPlayerColor()){
+        if (model.getCorrespondingPlayerByPiece(fromQ, fromR) != model.getCurrentPlayer().getPlayerColor()) {
             throw new IllegalMove("Cannot move other player's pieces");
         }
 
-        if (!model.getCurrentPlayer().hasPlayedQueen()){
+        if (!model.getCurrentPlayer().hasPlayedQueen()) {
             throw new IllegalMove("Have to play Queen before move is allowed");
+        }
+
+        if (model.isFloatingPiece(new Point(fromQ, fromR), new Point(toQ, toR))) {
+            throw new IllegalMove("Move breaks connection");
         }
 
         ArrayList<Piece> piecesOnLocation = new ArrayList<>();
