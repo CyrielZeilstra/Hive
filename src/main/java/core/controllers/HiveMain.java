@@ -64,6 +64,10 @@ public class HiveMain implements Hive {
             throw new IllegalMove("Move breaks connection");
         }
 
+        if (model.breaksConnection(new Point(fromQ, fromR))) {
+            throw new IllegalMove("Move creates floating island");
+        }
+
         ArrayList<Piece> piecesOnLocation = new ArrayList<>();
         for (Piece p : model.getBoard()) {
             if (p.getCenter().x == fromQ && p.getCenter().y == fromR) {
