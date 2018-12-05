@@ -20,7 +20,6 @@ public class HiveMain implements Hive {
 
     @Override
     public void play(Tile tile, int q, int r) throws IllegalMove {
-        Piece pec = model.createPiece(tile, q, r);
         if (!model.getCurrentPlayer().getAvailableTiles().contains(tile)) {
             throw new IllegalMove("Player does not have this piece");
         }
@@ -30,22 +29,7 @@ public class HiveMain implements Hive {
         if (model.getCurrentPlayer().getAmountOfMovesMade() == 3 && !model.getCurrentPlayer().hasPlayedQueen()) {
             throw new IllegalMove("Need to play Queen after 3 moves");
         }
-        // valid move.
-        model.getBoard().add(pec);
-        if (model.getCurrentPlayer().getPlayerColor() == BLACK) {
-            model.getBlackPlayer().getAvailableTiles().remove(tile);
-            model.getBlackPlayer().getPlayedPieces().add(pec);
-            if (tile == Tile.QUEEN_BEE) {
-                model.getBlackPlayer().setHasPlayedQueen(true);
-            }
-        } else {
-            model.getWhitePlayer().getAvailableTiles().remove(tile);
-            model.getWhitePlayer().getPlayedPieces().add(pec);
-            if (tile == Tile.QUEEN_BEE) {
-                model.getWhitePlayer().setHasPlayedQueen(true);
-            }
-        }
-        model.swapTurn();
+        model.doPlay(tile, q, r);
     }
 
 

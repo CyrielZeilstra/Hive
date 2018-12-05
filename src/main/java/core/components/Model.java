@@ -26,7 +26,7 @@ public class Model {
 
     public void swapTurn() {
         if (getCurrentPlayer().getPlayerColor() == WHITE) {
-            System.out.println("Black PlayerModel it's your turn!");
+            System.out.println("Black Player it's your turn!");
             whitePlayer.addMove();
             setCurrentPlayer(blackPlayer);
             // check if player has placed the queen before move if not show only the queen
@@ -34,7 +34,7 @@ public class Model {
                 List<Enum> blackQueen = Arrays.asList(Hive.Tile.QUEEN_BEE);
             }
         } else if (getCurrentPlayer().getPlayerColor() == BLACK) {
-            System.out.println("White PlayerModel it's your turn!");
+            System.out.println("White Player it's your turn!");
             getBlackPlayer().addMove();
             setCurrentPlayer(whitePlayer);
 
@@ -492,7 +492,7 @@ public class Model {
         }
         ArrayList<Point> allowedMoves = new ArrayList<>();
 
-        if (piece == null){
+        if (piece == null) {
             System.out.println("Piece is was not found");
             return false;
         }
@@ -535,6 +535,26 @@ public class Model {
         Point newPosition = new Point(toQ, toR);
         lastpiece.setCenter(newPosition);
         getBoard().add(lastpiece);
+    }
+
+    public void doPlay(Hive.Tile tile, int q, int r) {
+        // valid move.
+        Piece pec = createPiece(tile, q, r);
+        getBoard().add(pec);
+        if (getCurrentPlayer().getPlayerColor() == BLACK) {
+            getBlackPlayer().getAvailableTiles().remove(tile);
+            getBlackPlayer().getPlayedPieces().add(pec);
+            if (tile == Hive.Tile.QUEEN_BEE) {
+                getBlackPlayer().setHasPlayedQueen(true);
+            }
+        } else {
+            getWhitePlayer().getAvailableTiles().remove(tile);
+            getWhitePlayer().getPlayedPieces().add(pec);
+            if (tile == Hive.Tile.QUEEN_BEE) {
+                getWhitePlayer().setHasPlayedQueen(true);
+            }
+        }
+        swapTurn();
     }
 
     public Piece createPiece(Hive.Tile tile, int q, int r) {
