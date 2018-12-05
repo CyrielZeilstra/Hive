@@ -64,8 +64,16 @@ public class HiveMain implements Hive {
             throw new IllegalMove("Move breaks connection");
         }
 
-        if (model.breaksConnection(new Point(fromQ, fromR))) {
+        if (model.breaksConnection(new Point(fromQ, fromR), new Point(toQ, toR))) {
             throw new IllegalMove("Move creates floating island");
+        }
+
+        if (!model.canSlideIn(new Point(fromQ, fromR), new Point(toQ, toR))) {
+            throw new IllegalMove("Move cannot slide in");
+        }
+
+        if (!model.isTouchingMove(new Point(fromQ, fromR), new Point(toQ, toR))) {
+            throw new IllegalMove("Not touching piece while moving");
         }
 
         ArrayList<Piece> piecesOnLocation = new ArrayList<>();

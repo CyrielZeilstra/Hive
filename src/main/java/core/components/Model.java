@@ -63,9 +63,10 @@ public class Model {
         return points;
     }
 
-    public boolean breaksConnection(Point from) {
+    public boolean breaksConnection(Point from, Point to) {
         ArrayList<Point> temp = getBoardAsPoints();
         temp.remove(from);
+        temp.add(to);
         if (temp.size() <= 2) {
             return false;
         }
@@ -120,26 +121,23 @@ public class Model {
     }
 
     public boolean isTouchingMove(Point from, Point to) {
-        ArrayList<Point> neighboursFrom = getNeighbours(from);
-        ArrayList<Point> neighboursTo = getNeighbours(to);
-        neighboursFrom.remove(from);
-        neighboursTo.remove(from);
-        for (Point p : neighboursTo) {
-            if (neighboursFrom.contains(p)) {
-                return true;
-            }
+        if (getBoardAsPoints().contains(to) || Collections.frequency(getBoardAsPoints(), from) > 1) {
+            // possible beetle trying to crawl up.
+            return true;
         }
-        return false;
-    }
 
-    public boolean isTouchingMoveCustomBoard(Point from, Point to, ArrayList<Point> board) {
+        ArrayList<Point> temp = new ArrayList<>(getBoardAsPoints());
+        temp.remove(from);
+        temp.add(to);
+
         ArrayList<Point> neighboursFrom = getSurroundingPoints(from);
         ArrayList<Point> neighboursTo = getSurroundingPoints(to);
+
         neighboursFrom.remove(from);
         neighboursTo.remove(from);
         ArrayList<Point> neighbors = new ArrayList<>();
         for (Point p : neighboursTo) {
-            if (neighboursFrom.contains(p) && board.contains(p)) {
+            if (neighboursFrom.contains(p) && temp.contains(p)) {
                 neighbors.add(p);
             }
         }
@@ -274,7 +272,7 @@ public class Model {
     public ArrayList<Point> getSpiderMoves(Point origin) {
         Set<Point> firstPoints = new HashSet<>();
         for (Point p1 : getSurroundingPoints(origin)) {
-            if (isTouchingMove(origin, p1) && canSlideIn(origin, p1) && !getBoardAsPoints().contains(p1)) {
+            if (!getBoardAsPoints().contains(p1)) {
                 firstPoints.add(p1);
             }
         }
@@ -287,7 +285,7 @@ public class Model {
                     ArrayList<Point> tempboard = new ArrayList<>(getBoardAsPoints());
                     tempboard.remove(origin);
                     tempboard.add(p3);
-                    if (!firstPoints.contains(p3) && isTouchingMoveCustomBoard(p2, p3, tempboard)) {
+                    if (!firstPoints.contains(p3)) {
                         secondPoints.add(p3);
                     }
                 }
@@ -302,7 +300,7 @@ public class Model {
                     ArrayList<Point> tempboard = new ArrayList<>(getBoardAsPoints());
                     tempboard.remove(origin);
                     tempboard.add(p4);
-                    if (!firstPoints.contains(p4) && !secondPoints.contains(p4) && isTouchingMoveCustomBoard(p3, p4, tempboard)) {
+                    if (!firstPoints.contains(p4) && !secondPoints.contains(p4)) {
                         thirdPoints.add(p4);
                     }
                 }
@@ -321,7 +319,7 @@ public class Model {
             if (Collections.frequency(getBoardAsPoints(), origin) > 1) {
                 moves.add(move);
             } else {
-                if (isTouchingMoveCustomBoard(origin, move, tempboard) || getBoardAsPoints().contains(move)) {
+                if (getBoardAsPoints().contains(move)) {
                     moves.add(move);
                 }
             }
@@ -384,7 +382,7 @@ public class Model {
             ArrayList<Point> tempboard = new ArrayList<>(getBoardAsPoints());
             tempboard.remove(origin);
             tempboard.add(p);
-            if (!getBoardAsPoints().contains(p) && canSlideIn(origin, p) && isTouchingMoveCustomBoard(origin, p, tempboard)) {
+            if (!getBoardAsPoints().contains(p)) {
                 moves.add(p);
             }
         }
@@ -399,7 +397,7 @@ public class Model {
             ArrayList<Point> tempboard = new ArrayList<>(getBoardAsPoints());
             tempboard.remove(origin);
             tempboard.add(p);
-            if (!getBoardAsPoints().contains(p) && canSlideIn(origin, p) && isTouchingMoveCustomBoard(origin, p, tempboard)) {
+            if (!getBoardAsPoints().contains(p)) {
                 validSurroundingPoints.add(p);
             }
         }
@@ -421,7 +419,7 @@ public class Model {
 
     public ArrayList<Point> recursiveAntSearch(Point curPos, ArrayList<Point> board, Set<Point> validPoints) {
         for (Point x : getSurroundingPoints(curPos)) {
-            if (!getBoardAsPoints().contains(x) && !validPoints.contains(x) && canSlideIn(curPos, x)) {
+            if (!getBoardAsPoints().contains(x) && !validPoints.contains(x)) {
                 validPoints.add(x);
                 recursiveAntSearch(x, board, validPoints);
             }

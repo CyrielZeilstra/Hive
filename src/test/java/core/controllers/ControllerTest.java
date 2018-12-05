@@ -228,24 +228,41 @@ public class ControllerTest {
         hive.play(Hive.Tile.QUEEN_BEE, -1, 0);
         hive.play(Hive.Tile.SOLDIER_ANT, 1, 0);
         hive.play(Hive.Tile.SOLDIER_ANT, -2, 0);
-        hive.move(0, 0, 1, -1);
         exception.expect(nl.hanze.hive.Hive.IllegalMove.class);
         exception.expectMessage("Move creates floating island");
-        hive.move(1, 0, 2, 0);
+        hive.move(0, 0, 1, -1);
     }
-//
-//
-//    @DisplayName("6b can piece slip in")
-//    @Test
-//    public void pieceHasToSlideIn() throws nl.hanze.hive.Hive.IllegalMove {
-//        hive.play(Hive.Tile.QUEEN_BEE, 0, 0);
-//        hive.play(Hive.Tile.QUEEN_BEE, 1, -2);
-//        hive.play(Hive.Tile.BEETLE, 0, -1);
-//        hive.move(0, -1, 1, -1);
-//        expectedEx.expect(nl.hanze.hive.Hive.IllegalMove.class);
-//        expectedEx.expectMessage("Not a valid move.");
-//        assertFalse(hive.model.canSlideIn(new Point(0, -1), new Point(1, -1)));
-//    }
+
+    @DisplayName("6b Een verschuiving moet schuivend uitgevoerd kunnen worden.")
+    @Test
+    public void pieceHasToSlideIn() throws nl.hanze.hive.Hive.IllegalMove {
+        hive.play(Hive.Tile.QUEEN_BEE, 0, 0);
+        hive.play(Hive.Tile.QUEEN_BEE, -1, 0);
+        hive.play(Hive.Tile.SOLDIER_ANT, 1, 0);
+        hive.play(Hive.Tile.SOLDIER_ANT, -1, -1);
+        hive.play(Hive.Tile.SOLDIER_ANT, 0, 1);
+        hive.play(Hive.Tile.SOLDIER_ANT, -2, 1);
+        hive.play(Hive.Tile.SOLDIER_ANT, 1, -1);
+        hive.play(Hive.Tile.SOLDIER_ANT, -2, 0);
+        exception.expect(nl.hanze.hive.Hive.IllegalMove.class);
+        exception.expectMessage("Move cannot slide in");
+        hive.move(0, 0, -1, 1);
+    }
+
+
+    @DisplayName("6c Tijdens een verschuiving moet de steen continu in contact blijven met minstens één andere steen.")
+    @Test
+    public void pieceHasToKeepTouching() throws nl.hanze.hive.Hive.IllegalMove {
+        hive.play(Hive.Tile.QUEEN_BEE, 0, 0);
+        hive.play(Hive.Tile.QUEEN_BEE, -1, 0);
+        hive.play(Hive.Tile.SOLDIER_ANT, 0, 1);
+        hive.play(Hive.Tile.SOLDIER_ANT, -2, 1);
+        hive.play(Hive.Tile.SOLDIER_ANT, -1, 2);
+        hive.play(Hive.Tile.SOLDIER_ANT, -2, 0);
+        exception.expect(nl.hanze.hive.Hive.IllegalMove.class);
+        exception.expectMessage("Not touching piece while moving");
+        hive.move(-1, 2, -2, 2);
+    }
 
 //    @DisplayName("12 PlayerModel can only pass if amountOfMovesMade = 0")
 //    @Test
