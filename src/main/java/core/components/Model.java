@@ -325,7 +325,7 @@ public class Model {
                     piece = p;
                 }
             }
-            if (getBoard().get(getBoard().lastIndexOf(piece)).getPlayer() == getCurrentPlayer().getPlayerColor()){
+            if (getBoard().get(getBoard().lastIndexOf(piece)).getPlayer() == getCurrentPlayer().getPlayerColor()) {
                 return getSurroundingPoints(origin);
             }
         }
@@ -358,7 +358,7 @@ public class Model {
     }
 
     public ArrayList<Point> getAntMoves(Point origin) {
-        ArrayList<Point> moves = new ArrayList<>();
+        HashSet<Point> moves = new HashSet<>();
         ArrayList<Point> validSurroundingPoints = new ArrayList<>();
 
         for (Point p : getSurroundingPoints(origin)) {
@@ -372,27 +372,27 @@ public class Model {
 
         if (validSurroundingPoints.size() == 0) {
             // we cant move from current spot.
-            return moves;
+            return new ArrayList<>(moves);
         } else {
             // we can move from current spot!
             for (Point p : validSurroundingPoints) {
                 ArrayList<Point> tempboard = new ArrayList<>(getBoardAsPoints());
                 tempboard.remove(origin);
-                moves.addAll(recursiveAntSearch(p, tempboard, new HashSet<>(validSurroundingPoints)));
+                moves.addAll(recursiveAntSearch(p, origin, new HashSet<>()));
             }
-            return moves;
+            return new ArrayList<>(moves);
         }
 
     }
 
-    public ArrayList<Point> recursiveAntSearch(Point curPos, ArrayList<Point> board, Set<Point> validPoints) {
+    public HashSet<Point> recursiveAntSearch(Point curPos, Point origin, HashSet<Point> validPoints) {
         for (Point x : getSurroundingPoints(curPos)) {
-            if (!getBoardAsPoints().contains(x) && !isFloatingPiece(curPos, x) && !validPoints.contains(x) && !isFloatingPiece(curPos, x) && canSlideIn(curPos, x)) {
+            if (!getBoardAsPoints().contains(x) && !validPoints.contains(x) && !isFloatingPiece(origin, x) && canSlideIn(curPos, x)) {
                 validPoints.add(x);
-                recursiveAntSearch(x, board, validPoints);
+                recursiveAntSearch(x, origin, validPoints);
             }
         }
-        return new ArrayList(validPoints);
+        return validPoints;
     }
 
     public ArrayList<Point> getGrasshopperMoves(Point origin) {
@@ -441,16 +441,6 @@ public class Model {
             }
         }
         return moves;
-    }
-
-    public ArrayList<Point> recursiveAntSearch(Point curPos, Set<Point> validPoints) {
-        for (Point x : getSurroundingPoints(curPos)) {
-            if (!getBoardAsPoints().contains(x) && !isFloatingPiece(curPos, x) && !validPoints.contains(x) && canSlideIn(curPos, x)) {
-                validPoints.add(x);
-                recursiveAntSearch(x, validPoints);
-            }
-        }
-        return new ArrayList(validPoints);
     }
 
     public ArrayList<Point> getAvailablePlays() {
@@ -540,7 +530,7 @@ public class Model {
                 break;
         }
         System.out.println("Amount of moves allowed : " + allowedMoves.size());
-        System.out.println("Moves allowed for this piece : ");
+        System.out.print("Moves allowed for this piece : ");
         System.out.println(allowedMoves);
         if (allowedMoves.contains(to)) {
             return true;

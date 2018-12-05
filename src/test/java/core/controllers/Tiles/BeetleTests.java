@@ -19,7 +19,9 @@ public class BeetleTests {
     private HiveMain hive;
 
     @Before
-    public final void before() { hive = new HiveMain(new Model());    }
+    public final void before() {
+        hive = new HiveMain(new Model());
+    }
 
     @DisplayName("7a. Een kever verplaatst zich door precies één keer te verschuiven")
     @Test
@@ -29,7 +31,10 @@ public class BeetleTests {
         hive.play(Hive.Tile.BEETLE, -1, 0);
         hive.play(Hive.Tile.BEETLE, 2, 0);
         hive.move(-1, 0, 0, 0);
-        hive.play(Hive.Tile.SOLDIER_ANT, 2, -1);
+        hive.play(Hive.Tile.BEETLE, 2, -1);
         hive.move(0, 0, 0, -1);
+        exception.expect(nl.hanze.hive.Hive.IllegalMove.class);
+        exception.expectMessage("This piece is not allowed to move like that");
+        hive.move(2, -1, 0, -1);
     }
 }
