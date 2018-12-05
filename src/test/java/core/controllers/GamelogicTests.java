@@ -246,7 +246,6 @@ public class GamelogicTests {
         hive.move(0, 0, -1, 1);
     }
 
-
     @DisplayName("6c Tijdens een verschuiving moet de steen continu in contact blijven met minstens één andere steen.")
     @Test
     public void pieceHasToKeepTouching() throws nl.hanze.hive.Hive.IllegalMove {

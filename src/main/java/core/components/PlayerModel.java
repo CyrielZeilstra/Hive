@@ -35,10 +35,6 @@ public class PlayerModel {
         this.amountOfMovesMade++;
     }
 
-    public void setAmountOfMovesMade(int amountOfMovesMade) {
-        this.amountOfMovesMade = amountOfMovesMade;
-    }
-
     public boolean hasPlayedQueen() {
         return hasPlayedQueen;
     }
@@ -49,10 +45,6 @@ public class PlayerModel {
 
     public ArrayList<Hive.Tile> getAvailableTiles() {
         return availableTiles;
-    }
-
-    public void setAvailableTiles(ArrayList<Hive.Tile> availableTiles) {
-        this.availableTiles = availableTiles;
     }
 
     public Hive.Player getPlayerColor() {
