@@ -3,6 +3,7 @@ package core.controllers;
 import core.components.Model;
 import core.components.Piece;
 import nl.hanze.hive.Hive;
+import sun.font.TrueTypeFont;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -111,6 +112,7 @@ public class HiveMain implements Hive {
         for (Piece piece : model.getBoard()) {
             if (piece.getPiece() == Tile.QUEEN_BEE) {
                 if (model.getNeighbours(piece.getCenter()).size() == 6) {
+                    System.out.println(player + " won!");
                     return piece.getPlayer() != player;
                 }
             }
@@ -129,6 +131,10 @@ public class HiveMain implements Hive {
                 }
             }
         }
-        return count == 2;
+        if (count == 2) {
+            System.out.println("Game was a draw!");
+            return true;
+        }
+        return false;
     }
 }
