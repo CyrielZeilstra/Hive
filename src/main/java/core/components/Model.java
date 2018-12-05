@@ -480,6 +480,63 @@ public class Model {
         }
     }
 
+    public boolean canPieceMoveLikeThat(Point from, Point to) {
+        // find the type of piece
+        Piece piece = null;
+        for (Piece p : getBoard()) {
+            if (p.getCenter().equals(from)) {
+                // found piece
+                piece = p;
+                break;
+            }
+        }
+        ArrayList<Point> allowedMoves = new ArrayList<>();
+
+        if (piece == null){
+            System.out.println("Piece is was not found");
+            return false;
+        }
+
+        switch (piece.getPiece()) {
+            case QUEEN_BEE:
+                allowedMoves = getQueenMoves(piece.getCenter());
+                break;
+            case SOLDIER_ANT:
+                allowedMoves = getAntMoves(piece.getCenter());
+                break;
+            case SPIDER:
+                allowedMoves = getSpiderMoves(piece.getCenter());
+                break;
+            case BEETLE:
+                allowedMoves = getBeetleMoves(piece.getCenter());
+                break;
+            case GRASSHOPPER:
+                allowedMoves = getGrasshopperMoves(piece.getCenter());
+                break;
+        }
+        System.out.println("Moves allowed for this piece : ");
+        System.out.println(allowedMoves);
+        if (allowedMoves.contains(to)) {
+            return true;
+        }
+        return false;
+    }
+
+    public void doMove(int fromQ, int fromR, int toQ, int toR) {
+        ArrayList<Piece> piecesOnLocation = new ArrayList<>();
+        for (Piece p : getBoard()) {
+            if (p.getCenter().x == fromQ && p.getCenter().y == fromR) {
+                piecesOnLocation.add(p);
+            }
+        }
+        // Last piece is highest on the stack on that position
+        Piece lastpiece = piecesOnLocation.get(piecesOnLocation.size() - 1);
+        getBoard().remove(lastpiece);
+        Point newPosition = new Point(toQ, toR);
+        lastpiece.setCenter(newPosition);
+        getBoard().add(lastpiece);
+    }
+
     public Piece createPiece(Hive.Tile tile, int q, int r) {
         Piece pieceToPlay;
         pieceToPlay = new Piece(q, r, currentPlayer.getPlayerColor(), tile);

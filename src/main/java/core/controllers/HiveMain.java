@@ -76,18 +76,11 @@ public class HiveMain implements Hive {
             throw new IllegalMove("Not touching piece while moving");
         }
 
-        ArrayList<Piece> piecesOnLocation = new ArrayList<>();
-        for (Piece p : model.getBoard()) {
-            if (p.getCenter().x == fromQ && p.getCenter().y == fromR) {
-                piecesOnLocation.add(p);
-            }
+        if (!model.canPieceMoveLikeThat(new Point(fromQ, fromR), new Point(toQ, toR))) {
+            throw new IllegalMove("This piece is not allowed to move like that");
         }
-        // Last piece is highest on the stack on that position
-        Piece lastpiece = piecesOnLocation.get(piecesOnLocation.size() - 1);
-        model.getBoard().remove(lastpiece);
-        Point newPosition = new Point(toQ, toR);
-        lastpiece.setCenter(newPosition);
-        model.getBoard().add(lastpiece);
+
+        model.doMove(fromQ, fromR, toQ, toR);
 
         if (!isDraw()) {
             // No draw

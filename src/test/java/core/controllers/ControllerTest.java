@@ -263,12 +263,4 @@ public class ControllerTest {
         exception.expectMessage("Not touching piece while moving");
         hive.move(-1, 2, -2, 2);
     }
-
-//    @DisplayName("12 PlayerModel can only pass if amountOfMovesMade = 0")
-//    @Test
-//    public void passTest() throws Hive.IllegalMove {
-//        Hive.Player player = hive.model.getCurrentPlayer();
-//        hive.pass();
-//        assertTrue(hive.model.getCurrentPlayer() == player);
-//    }
 }
