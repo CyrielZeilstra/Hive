@@ -3,19 +3,16 @@ package core.controllers;
 import core.components.Model;
 import core.components.Piece;
 import nl.hanze.hive.Hive;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.rules.ExpectedException;
 
-import java.awt.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-import static org.junit.Assert.*;
-
-public class ControllerTest {
-
+public class GamelogicTests {
 
     @Rule
     public ExpectedException exception = ExpectedException.none();
@@ -245,7 +242,7 @@ public class ControllerTest {
         hive.play(Hive.Tile.SOLDIER_ANT, 1, -1);
         hive.play(Hive.Tile.SOLDIER_ANT, -2, 0);
         exception.expect(nl.hanze.hive.Hive.IllegalMove.class);
-        exception.expectMessage("Move cannot slide in");
+        exception.expectMessage("This piece is not allowed to move like that");
         hive.move(0, 0, -1, 1);
     }
 
@@ -257,10 +254,10 @@ public class ControllerTest {
         hive.play(Hive.Tile.QUEEN_BEE, -1, 0);
         hive.play(Hive.Tile.SOLDIER_ANT, 0, 1);
         hive.play(Hive.Tile.SOLDIER_ANT, -2, 1);
-        hive.play(Hive.Tile.SOLDIER_ANT, -1, 2);
+        hive.play(Hive.Tile.BEETLE, -1, 2);
         hive.play(Hive.Tile.SOLDIER_ANT, -2, 0);
         exception.expect(nl.hanze.hive.Hive.IllegalMove.class);
-        exception.expectMessage("Not touching piece while moving");
+        exception.expectMessage("This piece is not allowed to move like that");
         hive.move(-1, 2, -2, 2);
     }
 }
