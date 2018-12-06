@@ -22,7 +22,15 @@ public class GrasshopperTests {
     @DisplayName("11a. Een sprinkhaan verplaatst zich door in een rechte lijn een sprong te maken naar een veld meteen achter een andere steen in de richting van de sprong.")
     @Test
     public void HopperHasToMoveInStraightLine() throws Hive.IllegalMove {
-
+        hive.play(Hive.Tile.QUEEN_BEE, 0, 0);
+        hive.play(Hive.Tile.QUEEN_BEE, 1, 0);
+        hive.play(Hive.Tile.GRASSHOPPER, -1, 1);
+        hive.play(Hive.Tile.GRASSHOPPER, 1, 1);
+        hive.play(Hive.Tile.SOLDIER_ANT, 0, -1);
+        hive.play(Hive.Tile.SOLDIER_ANT, 2, -1);
+        exception.expect(nl.hanze.hive.Hive.IllegalMove.class);
+        exception.expectMessage("This piece is not allowed to move like that");
+        hive.move(-1, 1, -1, -1);
     }
 
 

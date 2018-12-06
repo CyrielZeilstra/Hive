@@ -37,6 +37,10 @@ public class HiveMain implements Hive {
     @Override
     public void move(int fromQ, int fromR, int toQ, int toR) throws IllegalMove {
         // Player can only move his own pieces.
+        if (!model.getBoardAsPoints().contains(new Point(fromQ,fromR))) {
+            throw new IllegalMove("Piece does not exist on the board.");
+        }
+
         if (model.getCorrespondingPlayerByPiece(fromQ, fromR) != model.getCurrentPlayer().getPlayerColor()) {
             throw new IllegalMove("Cannot move other player's pieces");
         }

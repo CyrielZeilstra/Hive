@@ -34,20 +34,42 @@ public class SpiderTests {
     @DisplayName("10b. Een spin mag zich niet verplaatsen naar het veld waar hij al staat")
     @Test
     public void SpiderCantMoveToSamePoint() throws Hive.IllegalMove {
-
+        hive.play(Hive.Tile.QUEEN_BEE, 0, 0);
+        hive.play(Hive.Tile.QUEEN_BEE, 1, 0);
+        hive.play(Hive.Tile.SPIDER, -1, 0);
+        hive.play(Hive.Tile.SPIDER, 2, 0);
+        exception.expect(nl.hanze.hive.Hive.IllegalMove.class);
+        exception.expectMessage("This piece is not allowed to move like that");
+        hive.move(-1, 0, -1, 0);
     }
 
 
     @DisplayName("10c. Een spin mag alleen verplaatst worden over en naar lege velden")
     @Test
     public void SpiderCanOnlyMoveToAndOverEmptyPoints() throws Hive.IllegalMove {
-
+        hive.play(Hive.Tile.QUEEN_BEE, 0, 0);
+        hive.play(Hive.Tile.QUEEN_BEE, 1, 0);
+        hive.play(Hive.Tile.SPIDER, -1, 0);
+        hive.play(Hive.Tile.SPIDER, 2, 0);
+        hive.play(Hive.Tile.SOLDIER_ANT, 0, -1);
+        hive.play(Hive.Tile.SOLDIER_ANT, 2, -1);
+        exception.expect(nl.hanze.hive.Hive.IllegalMove.class);
+        exception.expectMessage("This piece is not allowed to move like that");
+        hive.move(-1, 0, 2, -1);
     }
 
 
     @DisplayName("10d. Een spin mag tijdens zijn verplaatsing geen stap maken naar een veld waar hij tijdens de verplaatsing al is geweest")
     @Test
     public void SpiderCannotMoveToASpotWhereItHasAlreadyBeenBeforeDuringMove() throws Hive.IllegalMove {
-
+        hive.play(Hive.Tile.QUEEN_BEE, 0, 0);
+        hive.play(Hive.Tile.QUEEN_BEE, 1, 0);
+        hive.play(Hive.Tile.SPIDER, -1, 0);
+        hive.play(Hive.Tile.SPIDER, 2, 0);
+        hive.play(Hive.Tile.SOLDIER_ANT, 0, -1);
+        hive.play(Hive.Tile.SOLDIER_ANT, 2, -1);
+        exception.expect(nl.hanze.hive.Hive.IllegalMove.class);
+        exception.expectMessage("This piece is not allowed to move like that");
+        hive.move(-1, 0, 0, 1);
     }
 }

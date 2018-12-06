@@ -407,7 +407,6 @@ public class Model {
                 invalidLines.add(getLineDirection(origin, invalidPoint));
             }
         }
-
         for (Point p : getAllMoves()) {
             if (!invalidMoves.contains(p)) {
                 if (getLineDirection(origin, p) == 6) {
@@ -424,7 +423,7 @@ public class Model {
                             if (getLineDirection(origin, p) == getLineDirection(origin, pointOnSameLine)) {
                                 pointsOnSameLine++;
                                 if (getDistanceBetweenPoints(origin, p) < getDistanceBetweenPoints(origin, pointOnSameLine)) {
-                                    if (!invalidLines.contains(getLineDirection(origin, p)) && !breaksConnection(origin, pointOnSameLine)) {
+                                    if (!invalidLines.contains(getLineDirection(origin, p)) && !breaksConnection(origin, p)) {
                                         moves.add(p);
                                     }
                                     moves.remove(pointOnSameLine);
