@@ -164,29 +164,22 @@ public class Model {
     }
 
     public ArrayList<Point> getAvailableMovesSelectedBoardPiece(Piece p) {
-        ArrayList<Point> tempMoves = new ArrayList<>();
+        ArrayList<Point> tempMoves;
         Point origin = p.getCenter();
-
-        int amount = Collections.frequency(getBoardAsPoints(), origin);
-        if (amount > 1 && p.getPiece() == BEETLE) {
-            for (Point move : getSurroundingPoints(origin)) {
-                tempMoves.add(move);
-            }
-            return tempMoves;
+        if (p.getPiece() == QUEEN_BEE) {
+            tempMoves = getQueenMoves(origin);
+        } else if (p.getPiece() == SOLDIER_ANT) {
+            tempMoves = getAntMoves(origin);
+        } else if (p.getPiece() == BEETLE) {
+            tempMoves = getBeetleMoves(origin);
+        } else if (p.getPiece() == SPIDER) {
+            tempMoves = getSpiderMoves(origin);
+        } else if (p.getPiece() == GRASSHOPPER) {
+            tempMoves = getGrasshopperMoves(origin);
         } else {
-            if (p.getPiece() == QUEEN_BEE) {
-                tempMoves = getQueenMoves(origin);
-            } else if (p.getPiece() == Hive.Tile.SOLDIER_ANT) {
-                tempMoves = getAntMoves(origin);
-            } else if (p.getPiece() == SPIDER) {
-                tempMoves = getSpiderMoves(origin);
-            } else if (p.getPiece() == GRASSHOPPER) {
-                tempMoves = getGrasshopperMoves(origin);
-            } else {
-                tempMoves = getBeetleMoves(origin);
-            }
-            return tempMoves;
+            tempMoves = getBeetleMoves(origin);
         }
+        return tempMoves;
     }
 
     public ArrayList<Point> getSurroundingPoints(Point p) {
@@ -395,7 +388,53 @@ public class Model {
         return validPoints;
     }
 
+
     public ArrayList<Point> getGrasshopperMoves(Point origin) {
+        ArrayList<Point> moves = new ArrayList<>();
+        ArrayList<Point> potentialMoves = new ArrayList<>();
+
+        // check for every surrounding piece
+        for (Point p : getSurroundingPoints(origin)) {
+            // can we move from current spot ?
+            if (getBoardAsPoints().contains(p) && !breaksConnection(origin, p) && !isFloatingPiece(origin, p)) {
+                potentialMoves.add(p);
+            }
+        }
+
+        // get the direction and look in that direction untill reach open spot.
+        for (Point p2 : potentialMoves) {
+            System.out.println(p2);
+            moves.add(recursiveEndSearch(origin, p2));
+        }
+        return moves;
+    }
+
+    public Point recursiveEndSearch(Point origin, Point end) {
+        int xDiffrence = 0;
+        int yDiffrence = 0;
+        Point potentialEnd = end;
+        while (getBoardAsPoints().contains(potentialEnd)) {
+            if (end.x > origin.x) {
+                xDiffrence += 1;
+            } else if (end.x == origin.x) {
+                xDiffrence += 0;
+            } else {
+                xDiffrence += -1;
+            }
+
+            if (end.y > origin.y) {
+                yDiffrence += 1;
+            } else if (end.y == origin.y) {
+                yDiffrence += 0;
+            } else {
+                yDiffrence += -1;
+            }
+            potentialEnd = new Point(origin.x + xDiffrence, origin.y + yDiffrence);
+        }
+        return potentialEnd;
+    }
+
+    public ArrayList<Point> getGrasshopperMoves2(Point origin) {
         ArrayList<Point> moves = new ArrayList<>();
         ArrayList<Point> pointsAlreadyOnBoard = getBoardAsPoints();
         ArrayList<Point> invalidMoves = new ArrayList<>();

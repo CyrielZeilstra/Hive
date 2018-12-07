@@ -259,4 +259,24 @@ public class GamelogicTests {
         exception.expectMessage("This piece is not allowed to move like that");
         hive.move(-1, 2, -2, 2);
     }
+
+    @DisplayName("12.1 Een speler mag alleen passen als hij geen enkele steen kan spelen of verplaatsen")
+    @Test
+    public void PlayerCanOnlyPassIfNoPieceCanBePlayedOrMoved1() throws nl.hanze.hive.Hive.IllegalMove {
+        hive.play(Hive.Tile.QUEEN_BEE, 0, 0);
+        hive.play(Hive.Tile.QUEEN_BEE, -1, 0);
+        exception.expect(nl.hanze.hive.Hive.IllegalMove.class);
+        exception.expectMessage("You can't pass, because you have moves to play");
+        hive.pass();
+    }
+
+    @DisplayName("12.2 Een speler mag alleen passen als hij geen enkele steen kan spelen of verplaatsen")
+    @Test
+    public void PlayerCanOnlyPassIfNoPieceCanBePlayedOrMoved2() throws nl.hanze.hive.Hive.IllegalMove {
+        hive.play(Hive.Tile.QUEEN_BEE, 0, 0);
+        hive.play(Hive.Tile.QUEEN_BEE, -1, 0);
+        exception.expect(nl.hanze.hive.Hive.IllegalMove.class);
+        exception.expectMessage("You can't pass, because you have moves to play");
+        hive.pass();
+    }
 }

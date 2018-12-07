@@ -57,14 +57,6 @@ public class HiveMain implements Hive {
             throw new IllegalMove("Move creates floating island");
         }
 
-//        if (!model.canSlideIn(new Point(fromQ, fromR), new Point(toQ, toR))) {
-//            throw new IllegalMove("Move cannot slide in");
-//        }
-//
-//        if (!model.isTouchingMove(new Point(fromQ, fromR), new Point(toQ, toR))) {
-//            throw new IllegalMove("Not touching piece while moving");
-//        }
-
         if (!model.canPieceMoveLikeThat(new Point(fromQ, fromR), new Point(toQ, toR))) {
             throw new IllegalMove("This piece is not allowed to move like that");
         }
@@ -86,7 +78,7 @@ public class HiveMain implements Hive {
         if (model.getCurrentPlayer().getPlayerColor() == WHITE && model.getWhitePlayer().hasPlayedQueen()) {
             for (Piece piece : model.getBoard()) {
                 if (piece.getPlayer() == WHITE) {
-                    moves = +model.getAvailableMovesSelectedBoardPiece(piece).size();
+                    moves = + model.getAvailableMovesSelectedBoardPiece(piece).size();
                 }
             }
         } else if (model.getBlackPlayer().hasPlayedQueen()) {
