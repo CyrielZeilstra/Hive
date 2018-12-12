@@ -266,7 +266,7 @@ public class GamelogicTests {
         hive.play(Hive.Tile.QUEEN_BEE, 0, 0);
         hive.play(Hive.Tile.QUEEN_BEE, -1, 0);
         exception.expect(nl.hanze.hive.Hive.IllegalMove.class);
-        exception.expectMessage("You can't pass, because you have moves to play");
+        exception.expectMessage("You can't pass, because you have pieces to play or you can move a piece");
         hive.pass();
     }
 
@@ -275,8 +275,31 @@ public class GamelogicTests {
     public void PlayerCanOnlyPassIfNoPieceCanBePlayedOrMoved2() throws nl.hanze.hive.Hive.IllegalMove {
         hive.play(Hive.Tile.QUEEN_BEE, 0, 0);
         hive.play(Hive.Tile.QUEEN_BEE, -1, 0);
+
+        hive.play(Hive.Tile.SOLDIER_ANT,1,0);
+        hive.play(Hive.Tile.SOLDIER_ANT,-2,0);
+        hive.play(Hive.Tile.SOLDIER_ANT,2,0);
+        hive.play(Hive.Tile.SOLDIER_ANT,-3,0);
+        hive.play(Hive.Tile.SOLDIER_ANT,3,0);
+        hive.play(Hive.Tile.SOLDIER_ANT,-4,0);
+
+        hive.play(Hive.Tile.BEETLE,4,0);
+        hive.play(Hive.Tile.BEETLE,-5,0);
+        hive.play(Hive.Tile.BEETLE,5,0);
+        hive.play(Hive.Tile.BEETLE,-6,0);
+
+        hive.play(Hive.Tile.GRASSHOPPER,6,0);
+        hive.play(Hive.Tile.GRASSHOPPER,-7,0);
+        hive.play(Hive.Tile.GRASSHOPPER,7,0);
+        hive.play(Hive.Tile.GRASSHOPPER,-8,0);
+
+        hive.play(Hive.Tile.SPIDER,8,0);
+        hive.play(Hive.Tile.SPIDER,-9,0);
+        hive.play(Hive.Tile.SPIDER,9,0);
+        hive.play(Hive.Tile.SPIDER,-10,0);
+
         exception.expect(nl.hanze.hive.Hive.IllegalMove.class);
-        exception.expectMessage("You can't pass, because you have moves to play");
+        exception.expectMessage("You can't pass, because you have pieces to play or you can move a piece");
         hive.pass();
     }
 }

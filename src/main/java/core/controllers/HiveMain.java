@@ -33,7 +33,6 @@ public class HiveMain implements Hive {
         model.doPlay(tile, q, r);
     }
 
-
     @Override
     public void move(int fromQ, int fromR, int toQ, int toR) throws IllegalMove {
         // Player can only move his own pieces.
@@ -88,7 +87,7 @@ public class HiveMain implements Hive {
                 }
             }
         }
-
+        System.out.println(moves);
         return moves == 0;
     }
 
@@ -99,7 +98,7 @@ public class HiveMain implements Hive {
                 model.swapTurn();
             }
         } else {
-            throw new IllegalMove("You can't pass, because you have moves to play!");
+            throw new IllegalMove("You can't pass, because you have pieces to play or you can move a piece");
         }
     }
 

@@ -434,55 +434,55 @@ public class Model {
         return potentialEnd;
     }
 
-    public ArrayList<Point> getGrasshopperMoves2(Point origin) {
-        ArrayList<Point> moves = new ArrayList<>();
-        ArrayList<Point> pointsAlreadyOnBoard = getBoardAsPoints();
-        ArrayList<Point> invalidMoves = new ArrayList<>();
-        ArrayList<Integer> invalidLines = new ArrayList<>();
-
-        for (Point invalidPoint : getSurroundingPoints(origin)) {
-            if (!pointsAlreadyOnBoard.contains(invalidPoint)) {
-                invalidMoves.add(invalidPoint);
-                invalidLines.add(getLineDirection(origin, invalidPoint));
-            }
-        }
-        for (Point p : getAllMoves()) {
-            if (!invalidMoves.contains(p)) {
-                if (getLineDirection(origin, p) == 6) {
-                    invalidMoves.add(p);
-                    invalidLines.add(getLineDirection(origin, p));
-                } else {
-                    if (moves.isEmpty()) {
-                        if (!invalidLines.contains(getLineDirection(origin, p)) && !breaksConnection(origin, p)) {
-                            moves.add(p);
-                        }
-                    } else {
-                        int pointsOnSameLine = 0;
-                        for (Point pointOnSameLine : moves) {
-                            if (getLineDirection(origin, p) == getLineDirection(origin, pointOnSameLine)) {
-                                pointsOnSameLine++;
-                                if (getDistanceBetweenPoints(origin, p) < getDistanceBetweenPoints(origin, pointOnSameLine)) {
-                                    if (!invalidLines.contains(getLineDirection(origin, p)) && !breaksConnection(origin, p)) {
-                                        moves.add(p);
-                                    }
-                                    moves.remove(pointOnSameLine);
-                                }
-                            }
-                        }
-                        if (pointsOnSameLine == 0) {
-                            if (!invalidLines.contains(getLineDirection(origin, p)) && !breaksConnection(origin, p)) {
-                                moves.add(p);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return moves;
-    }
+//    public ArrayList<Point> getGrasshopperMoves2(Point origin) {
+//        ArrayList<Point> moves = new ArrayList<>();
+//        ArrayList<Point> pointsAlreadyOnBoard = getBoardAsPoints();
+//        ArrayList<Point> invalidMoves = new ArrayList<>();
+//        ArrayList<Integer> invalidLines = new ArrayList<>();
+//
+//        for (Point invalidPoint : getSurroundingPoints(origin)) {
+//            if (!pointsAlreadyOnBoard.contains(invalidPoint)) {
+//                invalidMoves.add(invalidPoint);
+//                invalidLines.add(getLineDirection(origin, invalidPoint));
+//            }
+//        }
+//        for (Point p : getAllMoves()) {
+//            if (!invalidMoves.contains(p)) {
+//                if (getLineDirection(origin, p) == 6) {
+//                    invalidMoves.add(p);
+//                    invalidLines.add(getLineDirection(origin, p));
+//                } else {
+//                    if (moves.isEmpty()) {
+//                        if (!invalidLines.contains(getLineDirection(origin, p)) && !breaksConnection(origin, p)) {
+//                            moves.add(p);
+//                        }
+//                    } else {
+//                        int pointsOnSameLine = 0;
+//                        for (Point pointOnSameLine : moves) {
+//                            if (getLineDirection(origin, p) == getLineDirection(origin, pointOnSameLine)) {
+//                                pointsOnSameLine++;
+//                                if (getDistanceBetweenPoints(origin, p) < getDistanceBetweenPoints(origin, pointOnSameLine)) {
+//                                    if (!invalidLines.contains(getLineDirection(origin, p)) && !breaksConnection(origin, p)) {
+//                                        moves.add(p);
+//                                    }
+//                                    moves.remove(pointOnSameLine);
+//                                }
+//                            }
+//                        }
+//                        if (pointsOnSameLine == 0) {
+//                            if (!invalidLines.contains(getLineDirection(origin, p)) && !breaksConnection(origin, p)) {
+//                                moves.add(p);
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//        return moves;
+//    }
 
     public ArrayList<Point> getAvailablePlays() {
-        ArrayList<Point> tempMoves = new ArrayList<>();
+        Set<Point> tempMoves = new HashSet<>();
         ArrayList<Point> pointsAlreadyOnBoard = getBoardAsPoints();
         ArrayList<Point> otherPlayerMoves = new ArrayList<>();
 
@@ -504,7 +504,7 @@ public class Model {
             }
         }
 
-        return tempMoves;
+        return new ArrayList<>(tempMoves);
     }
 
     public Hive.Player getCorrespondingPlayerByPiece(int q, int r) {
