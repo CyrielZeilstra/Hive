@@ -481,6 +481,21 @@ public class Model {
 //        return moves;
 //    }
 
+    public ArrayList<Point> getGrasshopperMoves2(Point origin) {
+        ArrayList<Point> moves = new ArrayList<>();
+        ArrayList<Point> surroundingPoints = new ArrayList<>();
+
+        for (Point p : getSurroundingPoints(origin)) {
+            if (getBoardAsPoints().contains(p)) {
+                if (!isFloatingPiece(origin, p) && !breaksConnection(origin, p)) {
+                    surroundingPoints.add(p);
+                }
+            }
+        }
+        return moves;
+    }
+
+
     public ArrayList<Point> getAvailablePlays() {
         Set<Point> tempMoves = new HashSet<>();
         ArrayList<Point> pointsAlreadyOnBoard = getBoardAsPoints();
@@ -498,7 +513,7 @@ public class Model {
         for (Piece piece : board) {
             ArrayList<Point> moves = getSurroundingPoints(piece.getCenter());
             for (Point p : moves) {
-                if (getCurrentPlayer().getPlayerColor() == piece.getPlayer() && !otherPlayerMoves.contains(p) && !pointsAlreadyOnBoard.contains(p)) {
+                if (getCurrentPlayer().getPlayerColor().equals(piece.getPlayer()) && !otherPlayerMoves.contains(p) && !pointsAlreadyOnBoard.contains(p)) {
                     tempMoves.add(p);
                 }
             }
