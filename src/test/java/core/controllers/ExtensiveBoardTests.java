@@ -22,7 +22,7 @@ public class ExtensiveBoardTests {
 
     @Before
     public final void before() {
-        hive = new HiveMain(new Model());
+        hive = new HiveMain();
     }
 
     @DisplayName("Very large complete game test")

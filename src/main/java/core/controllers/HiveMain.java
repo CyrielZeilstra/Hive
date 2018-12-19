@@ -13,11 +13,7 @@ import static nl.hanze.hive.Hive.Player.WHITE;
 
 public class HiveMain implements Hive {
 
-    public Model model;
-
-    public HiveMain(Model m) {
-        this.model = m;
-    }
+    public Model model = new Model();
 
     @Override
     public void play(Tile tile, int q, int r) throws IllegalMove {
@@ -36,7 +32,7 @@ public class HiveMain implements Hive {
     @Override
     public void move(int fromQ, int fromR, int toQ, int toR) throws IllegalMove {
         // Player can only move his own pieces.
-        if (!model.getBoardAsPoints().contains(new Point(fromQ,fromR))) {
+        if (!model.getBoardAsPoints().contains(new Point(fromQ, fromR))) {
             throw new IllegalMove("Piece does not exist on the board.");
         }
 
@@ -77,7 +73,7 @@ public class HiveMain implements Hive {
         if (model.getCurrentPlayer().getPlayerColor() == WHITE && model.getWhitePlayer().hasPlayedQueen()) {
             for (Piece piece : model.getBoard()) {
                 if (piece.getPlayer() == WHITE) {
-                    moves = + model.getAvailableMovesSelectedBoardPiece(piece).size();
+                    moves = +model.getAvailableMovesSelectedBoardPiece(piece).size();
                 }
             }
         } else if (model.getBlackPlayer().hasPlayedQueen()) {

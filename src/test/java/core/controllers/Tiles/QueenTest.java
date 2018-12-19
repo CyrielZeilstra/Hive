@@ -17,7 +17,7 @@ public class QueenTest {
 
     @Before
     public final void before() {
-        hive = new HiveMain(new Model());
+        hive = new HiveMain();
     }
 
     @DisplayName("8a. De bijenkoningin verplaatst zich door precies één keer te verschuiven")

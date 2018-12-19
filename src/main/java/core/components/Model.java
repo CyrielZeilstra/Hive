@@ -151,7 +151,6 @@ public class Model {
         return false;
     }
 
-
     public ArrayList<Point> getNeighbours(Point point) {
         ArrayList<Point> neighbours = new ArrayList<>();
         ArrayList<Point> pointsAlreadyOnBoard = getBoardAsPoints();
@@ -198,59 +197,6 @@ public class Model {
         // tempmoves now contains all surrounding points
         // remove not allowed amountOfMovesMade
         return surrounding;
-    }
-
-    public int getDistanceBetweenPoints(Point from, Point to) {
-        return (int) Math.hypot(Math.abs(to.getY() - from.getY()), Math.abs(to.getX() - from.getX()));
-    }
-
-    public int getLineDirection(Point from, Point to) {
-        double dx = to.getX() - from.getX();
-        double dy = to.getY() - from.getY();
-        double p = from.getY() % 2;
-
-        //Move Directions: W = 0, E = 1, NW = 2, NE = 3, SW = 4, SE = 5, invalid move = 6
-        if (dy == 0) {
-            if (dx < 0) {
-                return 0;
-            } else {
-                return 1;
-            }
-        } else {
-            double nx = (Math.abs(dy) + (1 - p)) / 2;
-
-            if ((int) Math.abs(dx) != (int) Math.abs(nx)) {
-                return 6;
-            }
-            if (dx < 0) {
-                if (dy < 0) {
-                    return 2;
-                } else {
-                    return 4;
-                }
-            } else {
-                if (dy < 0) {
-                    return 3;
-                } else {
-                    return 5;
-                }
-            }
-        }
-    }
-
-    public ArrayList<Point> getAllMoves() {
-        ArrayList<Point> moves = new ArrayList<>();
-        ArrayList<Point> pointsAlreadyOnBoard = getBoardAsPoints();
-
-        for (Piece piece : board) {
-            ArrayList<Point> neighbours = getSurroundingPoints(piece.getCenter());
-            for (Point p : neighbours) {
-                if (!moves.contains(p) && !pointsAlreadyOnBoard.contains(p)) {
-                    moves.add(p);
-                }
-            }
-        }
-        return moves;
     }
 
     public Boolean isFloatingPiece(Point pFrom, Point pTo) {
@@ -388,7 +334,6 @@ public class Model {
         return validPoints;
     }
 
-
     public ArrayList<Point> getGrasshopperMoves(Point origin) {
         ArrayList<Point> moves = new ArrayList<>();
         ArrayList<Point> potentialMoves = new ArrayList<>();
@@ -433,53 +378,6 @@ public class Model {
         }
         return potentialEnd;
     }
-
-//    public ArrayList<Point> getGrasshopperMoves2(Point origin) {
-//        ArrayList<Point> moves = new ArrayList<>();
-//        ArrayList<Point> pointsAlreadyOnBoard = getBoardAsPoints();
-//        ArrayList<Point> invalidMoves = new ArrayList<>();
-//        ArrayList<Integer> invalidLines = new ArrayList<>();
-//
-//        for (Point invalidPoint : getSurroundingPoints(origin)) {
-//            if (!pointsAlreadyOnBoard.contains(invalidPoint)) {
-//                invalidMoves.add(invalidPoint);
-//                invalidLines.add(getLineDirection(origin, invalidPoint));
-//            }
-//        }
-//        for (Point p : getAllMoves()) {
-//            if (!invalidMoves.contains(p)) {
-//                if (getLineDirection(origin, p) == 6) {
-//                    invalidMoves.add(p);
-//                    invalidLines.add(getLineDirection(origin, p));
-//                } else {
-//                    if (moves.isEmpty()) {
-//                        if (!invalidLines.contains(getLineDirection(origin, p)) && !breaksConnection(origin, p)) {
-//                            moves.add(p);
-//                        }
-//                    } else {
-//                        int pointsOnSameLine = 0;
-//                        for (Point pointOnSameLine : moves) {
-//                            if (getLineDirection(origin, p) == getLineDirection(origin, pointOnSameLine)) {
-//                                pointsOnSameLine++;
-//                                if (getDistanceBetweenPoints(origin, p) < getDistanceBetweenPoints(origin, pointOnSameLine)) {
-//                                    if (!invalidLines.contains(getLineDirection(origin, p)) && !breaksConnection(origin, p)) {
-//                                        moves.add(p);
-//                                    }
-//                                    moves.remove(pointOnSameLine);
-//                                }
-//                            }
-//                        }
-//                        if (pointsOnSameLine == 0) {
-//                            if (!invalidLines.contains(getLineDirection(origin, p)) && !breaksConnection(origin, p)) {
-//                                moves.add(p);
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//        return moves;
-//    }
 
     public ArrayList<Point> getAvailablePlays() {
         Set<Point> tempMoves = new HashSet<>();

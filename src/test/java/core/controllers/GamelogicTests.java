@@ -20,22 +20,8 @@ public class GamelogicTests {
 
     @Before
     public final void before() {
-        hive = new HiveMain(new Model());
+        hive = new HiveMain();
     }
-
-//    @DisplayName("1c Both players have correct pieces at the start of the game.")
-//    @Test
-//    public void whenBoardCreatedBothPlayersHaveCorrectPieces() {
-//        List<Enum> pieces = Arrays.asList(Hive.Tile.QUEEN_BEE,
-//                Hive.Tile.SPIDER, Hive.Tile.SPIDER,
-//                Hive.Tile.BEETLE, Hive.Tile.BEETLE,
-//                Hive.Tile.GRASSHOPPER, Hive.Tile.GRASSHOPPER, Hive.Tile.GRASSHOPPER,
-//                Hive.Tile.SOLDIER_ANT, Hive.Tile.SOLDIER_ANT, Hive.Tile.SOLDIER_ANT);
-//        hive.model.getWhiteAvailablePieces().containsAll(pieces);
-//        hive.model.getBlackAvailablePieces().containsAll(pieces);
-//        assertTrue("Black should have all pieces at new game", hive.model.getBlackAvailablePieces().containsAll(pieces));
-//        assertTrue("White should have all pieces at new game", hive.model.getWhiteAvailablePieces().containsAll(pieces));
-//    }
 
     @DisplayName("2c Aan het begin van het spel is het speelveld leeg")
     @Test

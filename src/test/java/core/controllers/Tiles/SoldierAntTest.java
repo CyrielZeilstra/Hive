@@ -16,7 +16,7 @@ public class SoldierAntTest {
 
     @Before
     public final void before() {
-        hive = new HiveMain(new Model());
+        hive = new HiveMain();
     }
 
     @DisplayName("9a. Een soldatenmier verplaatst zich door een onbeperkt aantal keren te verschuiven")

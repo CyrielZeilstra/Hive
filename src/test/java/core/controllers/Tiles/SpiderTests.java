@@ -17,7 +17,7 @@ public class SpiderTests {
 
     @Before
     public final void before() {
-        hive = new HiveMain(new Model());
+        hive = new HiveMain();
     }
 
     @DisplayName("10a. Een spin verplaatst zich door precies drie keer te verschuiven")

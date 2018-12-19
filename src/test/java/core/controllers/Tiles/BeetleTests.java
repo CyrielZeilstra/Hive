@@ -20,7 +20,7 @@ public class BeetleTests {
 
     @Before
     public final void before() {
-        hive = new HiveMain(new Model());
+        hive = new HiveMain();
     }
 
     @DisplayName("7a. Een kever verplaatst zich door precies één keer te verschuiven")
