@@ -12,6 +12,7 @@ import org.junit.rules.ExpectedException;
 import java.awt.*;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 public class ExtensiveBoardTests {
@@ -25,7 +26,7 @@ public class ExtensiveBoardTests {
         hive = new HiveMain();
     }
 
-    @DisplayName("Very large complete game test")
+    @DisplayName("Very large game test")
     @Test
     public void ElaborateBoardTest() throws Hive.IllegalMove {
         hive.play(Hive.Tile.SOLDIER_ANT, 0, 0);
@@ -61,5 +62,40 @@ public class ExtensiveBoardTests {
 
         assertEquals(10, hive.model.getAvailablePlays().size());
         hive.play(Hive.Tile.SPIDER, -2, 0);
+    }
+
+    @DisplayName("Very large game test")
+    @Test
+    public void SecondElaborateBoardTest() throws Hive.IllegalMove {
+        hive.play(Hive.Tile.QUEEN_BEE, 50, 50);
+        hive.play(Hive.Tile.QUEEN_BEE, 51, 50);
+
+        hive.play(Hive.Tile.SOLDIER_ANT, 49, 50);
+        hive.play(Hive.Tile.SOLDIER_ANT, 52, 50);
+
+        hive.play(Hive.Tile.SOLDIER_ANT, 49, 49);
+        hive.play(Hive.Tile.SOLDIER_ANT, 53, 49);
+
+        hive.play(Hive.Tile.SOLDIER_ANT, 50, 48);
+        hive.play(Hive.Tile.SOLDIER_ANT, 53, 48);
+
+        hive.play(Hive.Tile.SPIDER, 51, 47);
+
+        assertEquals(19, hive.model.getAntMoves(new Point(53, 48)).size());
+
+        hive.play(Hive.Tile.SPIDER, 53, 47);
+        hive.move(51, 47, 51, 49);
+        hive.move(53, 47, 51, 47);
+
+
+        hive.play(Hive.Tile.GRASSHOPPER, 50, 49);
+        hive.play(Hive.Tile.SPIDER, 52, 47);
+
+        assertEquals(16, hive.model.getAntMoves(new Point(49, 49)).size());
+        assertEquals(2, hive.model.getQueenMoves(new Point(50, 50)).size());
+        assertEquals(5, hive.model.getGrasshopperMoves(new Point(50, 49)).size());
+        assertEquals(5, hive.model.getGrasshopperMoves(new Point(50, 49)).size());
+
+        hive.move(50,49,50,51);
     }
 }

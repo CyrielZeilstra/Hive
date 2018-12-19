@@ -396,7 +396,7 @@ public class Model {
         for (Piece piece : board) {
             ArrayList<Point> moves = getSurroundingPoints(piece.getCenter());
             for (Point p : moves) {
-                if (getCurrentPlayer().getPlayerColor() == piece.getPlayer() && !otherPlayerMoves.contains(p) && !pointsAlreadyOnBoard.contains(p)) {
+                if (getCurrentPlayer().getPlayerColor().equals(piece.getPlayer()) && !otherPlayerMoves.contains(p) && !pointsAlreadyOnBoard.contains(p)) {
                     tempMoves.add(p);
                 }
             }
