@@ -23,8 +23,10 @@ public class HiveMain implements Hive {
         if (!model.isPlayAllowed(q, r)) {
             throw new IllegalMove("Not a valid play");
         }
-        if (model.getCurrentPlayer().getAmountOfMovesMade() == 3 && !model.getCurrentPlayer().hasPlayedQueen()) {
-            throw new IllegalMove("Need to play Queen after 3 moves");
+        if (tile != Tile.QUEEN_BEE) {
+            if (model.getCurrentPlayer().getAmountOfMovesMade() == 3 && !model.getCurrentPlayer().hasPlayedQueen()) {
+                throw new IllegalMove("Need to play Queen after 3 moves");
+            }
         }
         model.doPlay(tile, q, r);
     }
@@ -100,11 +102,13 @@ public class HiveMain implements Hive {
 
     @Override
     public boolean isWinner(Player player) {
-        for (Piece piece : model.getBoard()) {
-            if (piece.getPiece() == Tile.QUEEN_BEE) {
-                if (model.getNeighbours(piece.getCenter()).size() == 6) {
-                    System.out.println(player + " won!");
-                    return piece.getPlayer() != player;
+        if (!isDraw()) {
+            for (Piece piece : model.getBoard()) {
+                if (piece.getPiece() == Tile.QUEEN_BEE) {
+                    if (model.getNeighbours(piece.getCenter()).size() == 6) {
+                        System.out.println(player + " won!");
+                        return piece.getPlayer() != player;
+                    }
                 }
             }
         }

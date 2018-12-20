@@ -37,4 +37,16 @@ public class BeetleTests {
         exception.expectMessage("This piece is not allowed to move like that");
         hive.move(2, -1, 0, -1);
     }
+
+    @DisplayName("7a. Een kever verplaatst zich door precies één keer te verschuiven")
+    @Test
+    public void beetleCanShiftToAndFromOccupied() throws Hive.IllegalMove {
+        hive.play(Hive.Tile.QUEEN_BEE, 0, 0);
+        hive.play(Hive.Tile.QUEEN_BEE, 1, 0);
+        hive.play(Hive.Tile.BEETLE, -1, 0);
+        hive.play(Hive.Tile.BEETLE, 2, 0);
+        hive.move(-1, 0, 0, 0);
+        hive.move(2, 0, 1, 0);
+        hive.move(0, 0, -1, 0);
+    }
 }

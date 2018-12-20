@@ -220,17 +220,47 @@ public class GamelogicTests {
     @Test
     public void pieceHasToSlideIn() throws nl.hanze.hive.Hive.IllegalMove {
         hive.play(Hive.Tile.QUEEN_BEE, 0, 0);
-        hive.play(Hive.Tile.QUEEN_BEE, -1, 0);
-        hive.play(Hive.Tile.SOLDIER_ANT, 1, 0);
-        hive.play(Hive.Tile.SOLDIER_ANT, -1, -1);
-        hive.play(Hive.Tile.SOLDIER_ANT, 0, 1);
-        hive.play(Hive.Tile.SOLDIER_ANT, -2, 1);
-        hive.play(Hive.Tile.SOLDIER_ANT, 1, -1);
-        hive.play(Hive.Tile.SOLDIER_ANT, -2, 0);
+        hive.play(Hive.Tile.QUEEN_BEE, 1, 0);
+        hive.play(Hive.Tile.SOLDIER_ANT, 0, -1);
+        hive.play(Hive.Tile.SOLDIER_ANT, 2, -1);
+        hive.play(Hive.Tile.SOLDIER_ANT, 0, -2);
+        hive.play(Hive.Tile.SOLDIER_ANT, 2, -2);
+        hive.move(0,-2, 1, -2);
         exception.expect(nl.hanze.hive.Hive.IllegalMove.class);
         exception.expectMessage("This piece is not allowed to move like that");
-        hive.move(0, 0, -1, 1);
+        hive.move(2, -2, 1, -1);
     }
+
+    @DisplayName("6b Een verschuiving moet schuivend uitgevoerd kunnen worden Beetle can move in anyway.")
+    @Test
+    public void pieceHasToSlideInTwo() throws nl.hanze.hive.Hive.IllegalMove {
+        //W
+        hive.play(Hive.Tile.QUEEN_BEE, 0, 0);
+
+        //B
+        hive.play(Hive.Tile.QUEEN_BEE, 1, 0);
+
+        //W
+        hive.play(Hive.Tile.SOLDIER_ANT, 0, -1);
+
+        //B
+        hive.play(Hive.Tile.SOLDIER_ANT, 2, -1);
+
+        //W
+        hive.play(Hive.Tile.SOLDIER_ANT, 0, -2);
+
+        //B
+        hive.play(Hive.Tile.SOLDIER_ANT, 3, -2);
+
+        //W
+        hive.move(0,-2, 1, -1);
+//        hive.play(Hive.Tile.BEETLE, 1, -2);
+//        hive.move(3,-2, 2, -2);
+//        exception.expect(nl.hanze.hive.Hive.IllegalMove.class);
+//        exception.expectMessage("This piece is not allowed to move like that");
+//        hive.move(1, -2, 1, -1);
+    }
+
 
     @DisplayName("6c Tijdens een verschuiving moet de steen continu in contact blijven met minstens één andere steen.")
     @Test
