@@ -75,17 +75,18 @@ public class HiveMain implements Hive {
         if (model.getCurrentPlayer().getPlayerColor() == WHITE && model.getWhitePlayer().hasPlayedQueen()) {
             for (Piece piece : model.getBoard()) {
                 if (piece.getPlayer() == WHITE) {
-                    moves = +model.getAvailableMovesSelectedBoardPiece(piece).size();
+                    moves = moves + model.getAvailableMovesSelectedBoardPiece(piece).size();
                 }
             }
         } else if (model.getBlackPlayer().hasPlayedQueen()) {
             for (Piece piece : model.getBoard()) {
                 if (piece.getPlayer() == BLACK) {
-                    moves = +model.getAvailableMovesSelectedBoardPiece(piece).size();
+                    moves = moves + model.getAvailableMovesSelectedBoardPiece(piece).size();
                 }
             }
         }
-        System.out.println(moves);
+
+        System.out.println("moves:" + moves);
         return moves == 0;
     }
 
